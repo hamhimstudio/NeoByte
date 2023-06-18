@@ -1,27 +1,70 @@
-import { CommandInteraction, EmbedBuilder } from "discord.js";
-import { Discord, Slash } from "discordx";
+import Dangercord from "dangercord";
+import {
+  ApplicationCommandOptionType,
+  CommandInteraction,
+  EmbedBuilder,
+  GuildMember,
+  User,
+} from "discord.js";
+import { Discord, Slash, SlashOption } from "discordx";
 
 @Discord()
 export class UserInfoCommand {
-    @Slash({
-        description: "Displays information about the user",
+  dangercord: Dangercord;
+  constructor() {
+    if (!process.env.DANGERCORD_TOKEN)
+      throw new Error("DANGERCORD_TOKEN is not defined!");
+    this.dangercord = new Dangercord(process.env.DANGERCORD_TOKEN);
+  }
+  @Slash({
+    description: "Displays information about the user",
+    dmPermission: false,
+  })
+  async userinfo(
+    @SlashOption({
+      name: "user",
+      description: "The user to get information about",
+      required: false,
+      type: ApplicationCommandOptionType.User,
     })
-    async userinfo(
-        interaction: CommandInteraction): Promise<void> {
-        const exampleEmbed = new EmbedBuilder()
-            .setColor(0x0099FF)
-            .setTitle('User Information')
-            .setAuthor({ name: 'The Coding Empire', iconURL: 'https://cdn.discordapp.com/icons/952138215136055329/a_9ada81bcdd8f523936199b56106bd222.webp?size=96', url: 'https://discord.gg/Z7NDVrTmDN' })
-            .setColor('#d3535f')
-            .addFields(
-                { name: 'User ID:', value: `${interaction.user.id}` },
-                { name: 'Username:', value: `${interaction.user.username}` },
-                { name: 'Created at:', value: `${interaction.user.createdAt}` },
-                { name: 'Is a bot?:', value: `${interaction.user.bot}` },
-            )
-            .setTimestamp()
-        interaction.reply({ embeds: [exampleEmbed] })
+    user: GuildMember | undefined,
+    interaction: CommandInteraction
+  ): Promise<void> {
+    await interaction.deferReply();
+    if (!user) {
+      user = interaction.member as GuildMember;
     }
+    var result = await this.dangercord.getUser(user.id);
 
+    const userInfo = new EmbedBuilder()
+      .setColor(0x0099ff)
+      .setTitle("User Information")
+      .setAuthor({
+        name: "The Coding Empire",
+        iconURL:
+          "https://cdn.discordapp.com/icons/952138215136055329/a_9ada81bcdd8f523936199b56106bd222.webp?size=96",
+        url: "https://discord.gg/Z7NDVrTmDN",
+      })
+      .setColor("#d3535f")
+      .addFields(
+        { name: "User ID:", value: `${user.id}` },
+        { name: "Username:", value: `${user.displayName}` },
+        { name: "Created at:", value: `${user.user.createdAt}` },
+        { name: "Is a bot?:", value: `${user.user.bot == true}` },
+        { name: "Dangercord:", value: `-----------` },
+        { name: "Reports:", value: `${result.reports}` },
+        { name: "Spammer:", value: `${result.flags?.spammer == true}`, inline: true  },
+        { name: "Blacklisted:", value: `${result.badges.blacklisted == true}`, inline: true  },
+        { name: "Raid Bot:", value: `${result.badges.raid_bot == true}`, inline: true  },
+        { name: "Scam Bot:", value: `${result.badges.scam_bot == true}`, inline: true },
+        {
+          name: "Votes:",
+          value: `👍:${result.votes.upvotes}
+---------------------------------
+👎: ${result.votes.downvotes}`,
+        }
+      )
+      .setTimestamp();
+    interaction.editReply({ embeds: [userInfo] });
+  }
 }
-
