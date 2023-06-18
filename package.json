@@ -2,17 +2,25 @@
   "name": "discord-bot",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "bot": "node index.js",
-    "deploy": "node deploy-commands",
-    "dev": "nodemon --watch commands --exec \"npm run deploy && node index.js\""
+    "bot": "node build/index.js",
+    "build": "tsc",
+    "deploy": "ts-node-esm src/deploy-commands.ts",
+    "dev": "nodemon --exec \"npm run deploy && ts-node-esm src/index.ts\" src/index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^14.11.0"
+    "discord.js": "^14.11.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.3"
   }
 }
