@@ -6,10 +6,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "bot": "node build/index.js",
-    "build": "tsc",
-    "deploy": "ts-node-esm src/deploy-commands.ts",
-    "dev": "nodemon --exec \"npm run deploy && ts-node-esm src/index.ts\" src/index.ts"
+    "build_js": "tsc",
+    "deploy_commands": "ts-node-esm src/deploy-commands.ts",
+    "run_bot": "node build/index.js",
+    "dev": "nodemon --exec \"npm run build_js && npm run deploy_commands && ts-node-esm src/index.ts\" src/index.ts"
   },
   "keywords": [],
   "author": "",
