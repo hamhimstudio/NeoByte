@@ -1,10 +1,11 @@
-const { SlashCommandBuilder } = require('discord.js');
+import ICommand from "../../models/ICommand.js";
+import { SlashCommandBuilder } from 'discord.js';
 
-module.exports = {
+export default {
 	data: new SlashCommandBuilder()
 		.setName('ping')
 		.setDescription('Replies with Pong!'),
 	async execute(interaction) {
 		await interaction.reply('🏓 Pong!');
 	},
-};
+} as ICommand;
