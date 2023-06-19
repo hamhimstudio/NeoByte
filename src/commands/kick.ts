@@ -6,6 +6,7 @@ export class KickCommand {
     @Slash({
         description: "Kicks a user",
         dmPermission: false,
+        defaultMemberPermissions: ["KickMembers"],
     })
     async kick(
         @SlashOption({
@@ -15,13 +16,13 @@ export class KickCommand {
             type: ApplicationCommandOptionType.User,
 
         })
+        user: GuildMember,
         @SlashOption({
             name: "reason",
             description: "Reason for the kick",
             required: true,
             type: ApplicationCommandOptionType.String,
         })
-        user: GuildMember,
         reason: string,
         interaction: CommandInteraction
     ): Promise<void> {
