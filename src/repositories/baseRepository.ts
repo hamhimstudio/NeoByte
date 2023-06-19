@@ -1,9 +1,6 @@
 import {
   DataSource,
   FilterOperators,
-  FindManyOptions,
-  FindOneOptions,
-  FindOptionsWhere,
   MongoRepository,
   ObjectLiteral,
 } from "typeorm";
