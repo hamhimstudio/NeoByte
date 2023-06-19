@@ -7,7 +7,7 @@ import {
 import { Discord, Slash, SlashOption } from "discordx";
 
 @Discord()
-export class BanCommand {
+export class UserManagement {
   @Slash({
     description: "Kicks a user",
     dmPermission: false,
