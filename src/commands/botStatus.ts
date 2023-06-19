@@ -32,7 +32,7 @@ export class BotStatusCommand {
       .addFields(
         { name: "Name:", value: `${interaction.client.user.username}` },
         { name: "Created at:", value: `${interaction.client.user.createdAt}` },
-        { name: "Contributors:", value: `${contributes.data.map(x => ` [${x.login}](${x.html_url}) | ${x.contributions} \n`).join("")}`},
+        { name: "Contributors:", value: `${contributes.data.map(x => ` [${x.login}](${x.html_url}) | ${x.contributions} Contributions\n`).join("")}`},
         { name: "Github:", value: `https://github.com/The-Coding-Empire/discord-bot` },
       )
       .setTimestamp();
