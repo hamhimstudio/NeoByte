@@ -14,3 +14,7 @@ After you've successfully installed all dependencies, run `npm run dev` or `npm 
 
 ## How to build for production
 
+Before installing everything rename `.env.example` to `.env` and put in your tokens.
+Now install all the dependencies using `npm install`.
+Then you can run `npm run build` and then `npm run start`
+Then the bot should run better for production use.
