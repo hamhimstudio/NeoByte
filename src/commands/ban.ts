@@ -15,15 +15,15 @@ export class BanCommand {
             type: ApplicationCommandOptionType.User,
 
         })
-        user: GuildMember,
         @SlashOption({
             name: "reason",
             description: "Reason for the ban",
             required: true,
             type: ApplicationCommandOptionType.String,
         })
-        interaction: CommandInteraction,
-
+        user: GuildMember,
+        reason: string,
+        interaction: CommandInteraction
     ): Promise<void> {
         const guild: Guild | null = interaction.guild;
         await interaction.deferReply();
@@ -34,7 +34,8 @@ export class BanCommand {
                 return
             }
             try {
-                await guild.members.ban(user);
+                await guild.members.ban(user, { reason: reason });
+                await interaction.editReply("✅ User has been banned.");
             } catch (error) {
                 console.error("Error banning user:", error);
                 await interaction.editReply("⛔ Failed to ban user.");
