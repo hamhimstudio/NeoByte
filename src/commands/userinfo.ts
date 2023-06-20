@@ -3,7 +3,8 @@ import {
     ApplicationCommandOptionType,
     CommandInteraction,
     EmbedBuilder,
-    GuildMember
+    GuildMember,
+    User
 } from "discord.js";
 import { Discord, Slash, SlashOption } from "discordx";
 
@@ -30,8 +31,14 @@ export class UserInfoCommand {
         interaction: CommandInteraction
     ): Promise<void> {
         await interaction.deferReply();
+        
         if (!user) {
             user = interaction.member as GuildMember;
+        }
+
+        if(user instanceof User){
+            interaction.editReply("The user is not in this guild!")
+            return
         }
         var result = await this.dangercord.getUser(user.id);
 
