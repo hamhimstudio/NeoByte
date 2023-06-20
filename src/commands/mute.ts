@@ -14,19 +14,22 @@ export class MuteCommand {
             description: "The user to mute",
             required: true,
             type: ApplicationCommandOptionType.User,
-        }) user: GuildMember,
+        })
+        user: GuildMember,
         @SlashOption({
             name: "reason",
             description: "Reason for the mute",
             required: true,
             type: ApplicationCommandOptionType.String,
-        }) reason: string,
+        })
+        reason: string,
         @SlashOption({
             name: "time",
             description: "Time for mute in minutes.",
             required: true,
             type: ApplicationCommandOptionType.Integer,
-        }) time: number,
+        })
+        time: number,
         interaction: CommandInteraction
     ): Promise<void> {
 
@@ -71,7 +74,8 @@ export class MuteCommand {
             description: "The user to unmute",
             required: true,
             type: ApplicationCommandOptionType.User,
-        }) user: GuildMember,
+        })
+        user: GuildMember,
         interaction: CommandInteraction
     ): Promise<void> {
 
