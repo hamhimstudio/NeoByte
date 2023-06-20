@@ -125,7 +125,6 @@ export class Phishing {
       Promise.allSettled(promises).then((x) => {
         try {
           var found = x.some((x) => {
-            console.log(x);
             return (
               x.status === "fulfilled" &&
               (x.value as any[]).some((x) => {
@@ -133,7 +132,6 @@ export class Phishing {
               })
             );
           });
-          console.log(found);
           if (found) {
             message.member
               ?.disableCommunicationUntil(Date.now() + 60 * 60 * 1000)
