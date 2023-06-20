@@ -138,7 +138,7 @@ export class Phishing {
               .catch((_) => {});
             message.channel.send(
               `Phishing link detected!
-    User: <@${message.author.id}>`
+User: <@${message.author.id}>`
             );
             message.delete().catch((_) => {});
           }
