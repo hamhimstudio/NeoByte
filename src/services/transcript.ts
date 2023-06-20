@@ -80,7 +80,7 @@ export default class transcript {
       .replaceAll(
         "{user.name}",
         (msg.member?.nickname || msg.author.username) +
-          (msg.author.bot ? "[BOT]" : "")
+          (msg.author.bot ? " [BOT]" : "")
       );
   }
 
