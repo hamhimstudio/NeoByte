@@ -1,5 +1,5 @@
 import { ArgsOf, Discord, On } from "discordx";
-import { MessageType } from "discord.js";
+import { Message, MessageType } from "discord.js";
 import axios from "axios";
 import phishingResponse from "../models/phishing.js";
 
@@ -87,47 +87,7 @@ export class Phishing {
     ) {
       return;
     }
-    var links = Array.from(
-      message.content.matchAll(/(http[s]?:\/\/([^ \n])*)/gim)
-    );
-    if (links.length > 0) {
-      var promises: Promise<unknown>[] = [];
-      links.forEach((x) => {
-        var fullUrl = x[0];
-        var url = x[0].substring(x[0].toLowerCase().indexOf("://") + 3).trim();
-
-        url = url.substring(0, url.indexOf("/") || url.length);
-
-        promises.push(this.check(url, fullUrl));
-      });
-      Promise.allSettled(promises).then((x) => {
-        try {
-          var found = x.some((x) => {
-            console.log(x);
-            return (
-              x.status === "fulfilled" &&
-              (x.value as any[]).some((x) => {
-                return x.status === "fulfilled" && x.value.result;
-              })
-            );
-          });
-          console.log(found);
-          if (found) {
-            message.member
-              ?.disableCommunicationUntil(Date.now() + 60 * 60 * 1000)
-              .catch((_) => {});
-            message.channel.send(
-              `Phishing link detected!
-  User: <@${message.author.id}>`
-            );
-            message.delete().catch((_) => {});
-          }
-        } catch (x) {
-          console.log("Couldnt delete phishing Message!");
-          console.log(x);
-        }
-      });
-    }
+    this.handle(message);
   }
 
   @On({ event: "messageCreate", priority: 1 })
@@ -146,6 +106,9 @@ export class Phishing {
     ) {
       return;
     }
+    this.handle(message);
+  }
+  async handle(message: Message<boolean>): Promise<void> {
     var links = Array.from(
       message.content.matchAll(/(http[s]?:\/\/([^ \n])*)/gim)
     );
@@ -177,7 +140,7 @@ export class Phishing {
               .catch((_) => {});
             message.channel.send(
               `Phishing link detected!
-User: <@${message.author.id}>`
+    User: <@${message.author.id}>`
             );
             message.delete().catch((_) => {});
           }
