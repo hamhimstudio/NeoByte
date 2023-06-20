@@ -14,8 +14,8 @@ import getMessages from "../utils/fetchManyMessages.js";
 @SlashGroup({ description: "Bump Reminder", name: "transcript" })
 @SlashGroup("transcript")
 export class transcriptcmd {
-  async startTranscript(channel: TextBasedChannel) {
-    const foundMessages = await getMessages(channel, -1);
+  async startTranscript(channel: TextBasedChannel, maxsize: number = -1) {
+    const foundMessages = await getMessages(channel, maxsize);
     var data = new transcript({ messages: foundMessages });
     var html = data.getHtml();
     return html;
@@ -32,14 +32,20 @@ export class transcriptcmd {
       type: ApplicationCommandOptionType.Channel,
       channelTypes: [ChannelType.GuildText, ChannelType.GuildAnnouncement],
     })
-    channel: TextBasedChannel,
+    channel: TextBasedChannel | undefined,
+    @SlashOption({
+      name: "maxsize",
+      description: "How many messages should be fetched",
+      type: ApplicationCommandOptionType.Number,
+    })
+    size: number | undefined,
     interaction: CommandInteraction
   ) {
     await interaction.deferReply();
     try {
       var attachment = new AttachmentBuilder(
         Buffer.from(
-          await this.startTranscript(channel || interaction.channel!),
+          await this.startTranscript(channel || interaction.channel!, size),
           "utf8"
         ),
         {
