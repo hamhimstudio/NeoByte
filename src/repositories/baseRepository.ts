@@ -1,16 +1,22 @@
 import {
   DataSource,
+  EntityTarget,
   FilterOperators,
   MongoRepository,
   ObjectLiteral,
 } from "typeorm";
 import { MongoFindManyOptions } from "typeorm/find-options/mongodb/MongoFindManyOptions";
 import { MongoFindOneOptions } from "typeorm/find-options/mongodb/MongoFindOneOptions";
+import connection from "./connection.js";
 
 export default class baseRepository<T extends ObjectLiteral> {
   connection: DataSource;
   repository: MongoRepository<T>;
 
+  constructor(instance: EntityTarget<T>) {
+    this.connection = connection;
+    this.repository = this.connection.getMongoRepository<T>(instance)
+  }
   create() {
     return this.repository.create();
   }
