@@ -32,7 +32,7 @@ export class ban {
   ): Promise<void> {
 
     if (!interaction.guild) {
-      await interaction.editReply("⛔ You must be in a guild!");
+      await interaction.editReply("You must be in a guild!");
       return
     }
 
@@ -45,14 +45,15 @@ export class ban {
         return;
       }
       try {
-        await guild.members.ban(user, { reason: reason });
-        await interaction.editReply(`${user} has been banned for ${reason}.`);
-        await user.send(`You have been banned for ${reason}.`)
+        await user.send(`You have been banned for ${reason} in ${interaction.guild.name}.`)
           .catch(() => interaction.followUp(`Can't send DM to ${user}!`));
       } catch (error) {
         console.error("Error banning user:", error);
         await interaction.editReply(`Failed to ban ${user}!`);
       }
+      await guild.members.ban(user, { reason: reason });
+      await interaction.editReply(`${user} has been banned for ${reason}.`);
+
     } else {
       await interaction.editReply(`Failed to ban ${user}!`);
     }
@@ -72,26 +73,32 @@ export class ban {
     user: GuildMember,
     interaction: CommandInteraction
   ): Promise<void> {
-    const guild: Guild | null = interaction.guild;
+
     await interaction.deferReply();
 
-    if (guild && user) {
-      if (user === (interaction.member as GuildMember)) {
-        await interaction.editReply("You can't unban yourself");
-        return;
-      }
-      try {
-        await guild.members.unban(user);
-        await interaction.editReply(`${user} has been unbanned.`);
-        await user.send(`You have been unbanned.`)
-          .catch(() => interaction.followUp(`Can't send DM to ${user}!`));
-      } catch (error) {
-        console.error("Error banning user:", error);
-        await interaction.editReply(`Can't send DM to ${user}!`);
-      }
-    } else {
-      await interaction.editReply(`Can't send DM to ${user}!`);
+    if (!interaction.guild) {
+      await interaction.editReply("You must be in a guild!");
+      return;
     }
-  }
 
+    const guild: Guild | null = interaction.guild;
+
+    if (user === interaction.member) {
+      await interaction.editReply("You cannot ban yourself!");
+      return;
+    }
+
+    try {
+      await user.send(`You have been unbanned in ${interaction.guild.name}.`)
+        .catch(() => interaction.followUp(`Can't send DM to ${user}!`));
+
+    } catch (error) {
+      console.error("Error unbanning user:", error);
+      await interaction.editReply(`Failed to unban ${user}!`);
+
+    }
+    await guild.members.unban(user);
+    await interaction.editReply(`${user} has been unbanned.`);
+
+  }
 }

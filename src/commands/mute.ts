@@ -31,6 +31,7 @@ export class MuteCommand {
         })
         time: number,
         interaction: CommandInteraction
+
     ): Promise<void> {
 
         if (!interaction.guild) {
@@ -57,7 +58,7 @@ export class MuteCommand {
             await user.timeout(timeoutTime);
             await interaction.editReply(`${user} has been muted for ${time} minute(s) for ${reason}.`);
 
-            await user.send(`You have been muted for ${time} minute(s) for ${reason}.`)
+            await user.send(`You have been muted for ${time} minute(s) for ${reason} in ${interaction.guild.name}.`)
                 .catch(() => interaction.followUp("Can't send DM to the user!"));
 
         } catch (error) {
@@ -81,7 +82,7 @@ export class MuteCommand {
         user: GuildMember,
         interaction: CommandInteraction
     ): Promise<void> {
-
+        await interaction.deferReply();
         if (!interaction.guild) {
             await interaction.editReply("You must be in a guild!");
             return;
@@ -95,7 +96,7 @@ export class MuteCommand {
         try {
             await user.timeout(null);
             await interaction.editReply(`${user} has been unmuted.`);
-            await user.send(`You have been unmuted.`)
+            await user.send(`You have been unmuted in ${interaction.guild.name}`)
                 .catch(() => interaction.followUp(`Can't send DM to ${user}!`));
 
         } catch (error) {
