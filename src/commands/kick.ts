@@ -41,20 +41,20 @@ export class kick {
 
     if (guild && user) {
       if (user === (interaction.member as GuildMember)) {
-        await interaction.editReply("⛔ You can't kick yourself.");
+        await interaction.editReply("You can't kick yourself.");
         return;
       }
       try {
         await guild.members.kick(user, reason);
-        await interaction.editReply("✅ User has been kicked.");
+        await interaction.editReply(`${user} has been kicked for ${reason}.`);
         await user.send(`You have been kicked for ${reason}.`)
-          .catch(() => interaction.followUp("Can't send DM to the user!"));
+          .catch(() => interaction.followUp(`Can't send DM to the ${user}!`));
       } catch (error) {
         console.error("Error kicking user:", error);
-        await interaction.editReply("⛔ Failed to kick user.");
+        await interaction.editReply(`Failed to kick ${user}!`);
       }
     } else {
-      await interaction.editReply("⛔ Failed to kick user.");
+      await interaction.editReply(`Failed to kick ${user}!`);
     }
   }
 }

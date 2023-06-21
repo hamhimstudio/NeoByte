@@ -57,7 +57,7 @@ export class MuteCommand {
             await user.timeout(timeoutTime);
             await interaction.editReply(`${user} has been muted for ${time} minute(s) for ${reason}.`);
 
-            await user.send(`You have been muted for ${time} minute(s) for ${reason}`)
+            await user.send(`You have been muted for ${time} minute(s) for ${reason}.`)
                 .catch(() => interaction.followUp("Can't send DM to the user!"));
 
         } catch (error) {
@@ -95,9 +95,11 @@ export class MuteCommand {
         try {
             await user.timeout(null);
             await interaction.editReply(`${user} has been unmuted.`);
+            await user.send(`You have been unmuted.`)
+                .catch(() => interaction.followUp(`Can't send DM to ${user}!`));
 
         } catch (error) {
-            await interaction.editReply("Failed to unmute user!");
+            await interaction.editReply(`Failed to unmute ${user} !`);
         }
     }
 }

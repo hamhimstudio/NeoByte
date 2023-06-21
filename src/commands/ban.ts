@@ -41,20 +41,20 @@ export class ban {
 
     if (guild && user) {
       if (user === (interaction.member as GuildMember)) {
-        await interaction.editReply("⛔ You can't ban yourself");
+        await interaction.editReply("You can't ban yourself");
         return;
       }
       try {
         await guild.members.ban(user, { reason: reason });
-        await interaction.editReply("✅ User has been banned.");
+        await interaction.editReply(`${user} has been banned for ${reason}.`);
         await user.send(`You have been banned for ${reason}.`)
-          .catch(() => interaction.followUp("Can't send DM to the user!"));
+          .catch(() => interaction.followUp(`Can't send DM to ${user}!`));
       } catch (error) {
         console.error("Error banning user:", error);
-        await interaction.editReply("⛔ Failed to ban user.");
+        await interaction.editReply(`Failed to ban ${user}!`);
       }
     } else {
-      await interaction.editReply("⛔ Failed to ban user.");
+      await interaction.editReply(`Failed to ban ${user}!`);
     }
   }
   @Slash({
@@ -77,20 +77,20 @@ export class ban {
 
     if (guild && user) {
       if (user === (interaction.member as GuildMember)) {
-        await interaction.editReply("⛔ You can't unban yourself");
+        await interaction.editReply("You can't unban yourself");
         return;
       }
       try {
         await guild.members.unban(user);
-        await interaction.editReply("✅ User has been unbanned.");
+        await interaction.editReply(`${user} has been unbanned.`);
         await user.send(`You have been unbanned.`)
-          .catch(() => interaction.followUp("Can't send DM to the user!"));
+          .catch(() => interaction.followUp(`Can't send DM to ${user}!`));
       } catch (error) {
         console.error("Error banning user:", error);
-        await interaction.editReply("⛔ Failed to unban user.");
+        await interaction.editReply(`Can't send DM to ${user}!`);
       }
     } else {
-      await interaction.editReply("⛔ Failed to unban user.");
+      await interaction.editReply(`Can't send DM to ${user}!`);
     }
   }
 
