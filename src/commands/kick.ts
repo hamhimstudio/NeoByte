@@ -31,7 +31,7 @@ export class kick {
     interaction: CommandInteraction
   ): Promise<void> {
 
-    if(!interaction.guild){
+    if (!interaction.guild) {
       await interaction.editReply("⛔ You must be in a guild!");
       return
     }
@@ -47,6 +47,8 @@ export class kick {
       try {
         await guild.members.kick(user, reason);
         await interaction.editReply("✅ User has been kicked.");
+        await user.send(`You have been kicked for ${reason}.`)
+          .catch(() => interaction.followUp("Can't send DM to the user!"));
       } catch (error) {
         console.error("Error kicking user:", error);
         await interaction.editReply("⛔ Failed to kick user.");

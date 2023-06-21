@@ -47,6 +47,8 @@ export class ban {
       try {
         await guild.members.ban(user, { reason: reason });
         await interaction.editReply("✅ User has been banned.");
+        await user.send(`You have been banned for ${reason}.`)
+          .catch(() => interaction.followUp("Can't send DM to the user!"));
       } catch (error) {
         console.error("Error banning user:", error);
         await interaction.editReply("⛔ Failed to ban user.");
@@ -81,6 +83,8 @@ export class ban {
       try {
         await guild.members.unban(user);
         await interaction.editReply("✅ User has been unbanned.");
+        await user.send(`You have been unbanned.`)
+          .catch(() => interaction.followUp("Can't send DM to the user!"));
       } catch (error) {
         console.error("Error banning user:", error);
         await interaction.editReply("⛔ Failed to unban user.");
