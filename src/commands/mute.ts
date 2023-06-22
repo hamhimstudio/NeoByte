@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, CommandInteraction, Guild, GuildMember } from "discord.js";
+import { ApplicationCommandOptionType, CommandInteraction, GuildMember } from "discord.js";
 import { Discord, Slash, SlashOption } from "discordx";
 
 @Discord()
@@ -25,23 +25,19 @@ export class MuteCommand {
         reason: string,
         @SlashOption({
             name: "time",
-            description: "Time for mute in minutes.",
+            description: "Time for mute in minutes",
             required: true,
             type: ApplicationCommandOptionType.Integer,
         })
         time: number,
         interaction: CommandInteraction
     ): Promise<void> {
-
         if (!interaction.guild) {
             await interaction.editReply("You must be in a guild!");
             return;
         }
 
-        const guild: Guild = interaction.guild;
         const timeoutTime: number = time * 60 * 1000;
-
-        await interaction.deferReply();
 
         if (time < 1) {
             await interaction.editReply("Time must be valid!");
@@ -54,14 +50,21 @@ export class MuteCommand {
         }
 
         try {
+            await user.send(`You have been muted for ${time} minute(s) in ${interaction.guild.name} for ${reason}.`);
             await user.timeout(timeoutTime);
-            await interaction.editReply(`${user} has been muted for ${time} minute(s) for ${reason}.`);
-
+            await interaction.reply(`${user} has been muted for ${time} minute(s) for ${reason}.`);
         } catch (error) {
-            await interaction.editReply("Failed to mute user!");
+            if (error instanceof Error) {
+                if (error.message === "Cannot send messages to this user") {
+                    await user.timeout(timeoutTime);
+                    await interaction.reply(`${user} has been muted for ${time} minute(s) for ${reason}\nNote: Can't DM user.`);
+                } else {
+                    console.error("Error muting user:", error);
+                    await interaction.reply(`Failed to mute ${user}! Error: ${error.message}`);
+                }
+            }
         }
     }
-
 
     @Slash({
         description: "Unmute a member",
@@ -78,23 +81,25 @@ export class MuteCommand {
         user: GuildMember,
         interaction: CommandInteraction
     ): Promise<void> {
-
         if (!interaction.guild) {
             await interaction.editReply("You must be in a guild!");
             return;
         }
 
-        if (user === interaction.member) {
-            await interaction.editReply("You cannot unmute yourself!");
-            return;
-        }
-
         try {
+            await user.send(`You have been unmuted in ${interaction.guild.name}.`);
             await user.timeout(null);
-            await interaction.editReply(`${user} has been unmuted.`);
-
+            await interaction.reply(`${user} has been unmuted.`);
         } catch (error) {
-            await interaction.editReply("Failed to unmute user!");
+            if (error instanceof Error) {
+                if (error.message === "Cannot send messages to this user") {
+                    await user.timeout(null);
+                    await interaction.reply(`${user} has been unmuted.\nNote: Can't DM user.`);
+                } else {
+                    console.error("Error unmuting user:", error);
+                    await interaction.reply(`Failed to unmute ${user}! Error: ${error.message}`);
+                }
+            }
         }
     }
 }

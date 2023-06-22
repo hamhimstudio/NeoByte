@@ -1,13 +1,8 @@
-import {
-  ApplicationCommandOptionType,
-  CommandInteraction,
-  Guild,
-  GuildMember,
-} from "discord.js";
+import { ApplicationCommandOptionType, CommandInteraction, GuildMember } from "discord.js";
 import { Discord, Slash, SlashOption } from "discordx";
 
 @Discord()
-export class kick {
+export class KickCommand {
   @Slash({
     description: "Kicks a user",
     dmPermission: false,
@@ -30,29 +25,29 @@ export class kick {
     reason: string,
     interaction: CommandInteraction
   ): Promise<void> {
-
-    if(!interaction.guild){
-      await interaction.editReply("⛔ You must be in a guild!");
-      return
+    if (!interaction.guild) {
+      await interaction.reply("You must be in a guild!");
+      return;
     }
 
-    const guild: Guild = interaction.guild;
-    await interaction.deferReply();
+    if (user === interaction.member) {
+      await interaction.reply("You cannot kick yourself!");
+      return;
+    }
 
-    if (guild && user) {
-      if (user === (interaction.member as GuildMember)) {
-        await interaction.editReply("⛔ You can't kick yourself.");
-        return;
+    try {
+      await user.send(`You have been kicked from ${interaction.guild.name} for ${reason}.`);
+      await interaction.reply(`${user} has been kicked for ${reason}.`);
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message === "Cannot send messages to this user") {
+          await user.kick(reason);
+          await interaction.reply(`${user} has been kicked for ${reason}.\nNote: Can't DM user.`);
+        } else {
+          console.error("Error kicking user:", error);
+          await interaction.reply(`Failed to kick ${user}! Error: ${error.message}`);
+        }
       }
-      try {
-        await guild.members.kick(user, reason);
-        await interaction.editReply("✅ User has been kicked.");
-      } catch (error) {
-        console.error("Error kicking user:", error);
-        await interaction.editReply("⛔ Failed to kick user.");
-      }
-    } else {
-      await interaction.editReply("⛔ Failed to kick user.");
     }
   }
 }
