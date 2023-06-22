@@ -11,7 +11,7 @@ import transcript from "../services/transcript.js";
 import getMessages from "../utils/fetchManyMessages.js";
 
 @Discord()
-@SlashGroup({ description: "Bump Reminder", name: "transcript" })
+@SlashGroup({ description: "Creates a Transcript of the given channel in HTML.", name: "transcript" })
 @SlashGroup("transcript")
 export class transcriptcmd {
   async startTranscript(channel: TextBasedChannel, maxsize: number = -1) {
