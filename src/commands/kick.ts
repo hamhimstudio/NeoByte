@@ -1,8 +1,4 @@
-import {
-  ApplicationCommandOptionType,
-  CommandInteraction,
-  GuildMember
-} from "discord.js";
+import { ApplicationCommandOptionType, CommandInteraction, GuildMember } from "discord.js";
 import { Discord, Slash, SlashOption } from "discordx";
 
 @Discord()
@@ -29,30 +25,29 @@ export class KickCommand {
     reason: string,
     interaction: CommandInteraction
   ): Promise<void> {
-    await interaction.deferReply();
-
     if (!interaction.guild) {
-      await interaction.editReply("You must be in a guild!");
+      await interaction.reply("You must be in a guild!");
       return;
     }
+
     if (user === interaction.member) {
-      await interaction.editReply("You cannot kick yourself!");
+      await interaction.reply("You cannot kick yourself!");
       return;
     }
 
     try {
-      await user.send(`You have been kicked for ${reason} in ${interaction.guild.name}`)
-        .catch(() =>
-          interaction.followUp(`Can't send DM to ${user}!`)
-        );
-
+      await user.send(`You have been kicked from ${interaction.guild.name} for ${reason}.`);
+      await interaction.reply(`${user} has been kicked for ${reason}.`);
     } catch (error) {
-      console.error("Error kicking user:", error);
-      await interaction.editReply(`Failed to kick ${user}!`);
+      if (error instanceof Error) {
+        if (error.message === "Cannot send messages to this user") {
+          await user.kick(reason);
+          await interaction.reply(`${user} has been kicked for ${reason}.\nNote: Can't DM user.`);
+        } else {
+          console.error("Error kicking user:", error);
+          await interaction.reply(`Failed to kick ${user}! Error: ${error.message}`);
+        }
+      }
     }
-
-    await user.kick(reason);
-    await interaction.editReply(`${user} has been kicked for ${reason}.`);
-
   }
 }
