@@ -4,6 +4,7 @@ This is the source code for the official Discord bot of The Coding Empire Discor
 ## Do we accept contribution?
 
 We welcome any contributions. You can make changes to the code by making a pull request.
+For more information, please read CONTRIBUTING.md.
 
 *Note: You need to have to have [NodejS](https://nodejs.org/en/download) installed on your computer*
 ## How to run this locally for development purposes?
