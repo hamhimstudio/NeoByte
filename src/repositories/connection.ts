@@ -1,13 +1,16 @@
-import { DataSource } from "typeorm"
+import { DataSource } from "typeorm";
+import warn from "../models/warn.js";
+
 
 const connection = new DataSource({
     type: "mongodb",
     host: process.env.MONGODB_URL || "localhost",
-    port: Number(process.env.MONGODB_PORT)|| 27017,
+    port: 2020,
     database: process.env.MONGODB_DB || "tce-bot",
     username: process.env.MONGODB_USERNAME,
     password: process.env.MONGODB_PASSWORD,
-    entities: [],
+    entities: [warn],
+    synchronize:true,
 })
 
 export default connection;
