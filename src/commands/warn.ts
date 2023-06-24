@@ -1,3 +1,4 @@
+
 import {
   ApplicationCommandOptionType,
   CommandInteraction,
@@ -10,26 +11,32 @@ import {
   SlashOption
 } from "discordx";
 import { Inject } from "typedi";
-import WarnService from "../services/warnService.js";
+import warnService from "../services/warnService.js";
 
 @Discord()
+
 export class WarnCommand {
+
   @Inject()
-  warnService: WarnService;
+  warnService: warnService;
 
   @Slash({
     description: "Warns a user",
     dmPermission: false,
     defaultMemberPermissions: ["KickMembers"],
   })
+
   async warn(
+
     @SlashOption({
       name: "user",
       description: "The user to warn",
       required: true,
       type: ApplicationCommandOptionType.User,
     })
+    
     user: GuildMember,
+
 
     @SlashOption({
       name: "reason",
@@ -37,8 +44,9 @@ export class WarnCommand {
       required: true,
       type: ApplicationCommandOptionType.String,
     })
+   
     reason: string | undefined,
-
+    
     @SlashOption({
       name: "anonymous",
       description: "Display moderator",
@@ -48,14 +56,15 @@ export class WarnCommand {
     anonymous: boolean,
 
     interaction: CommandInteraction,
+
   ): Promise<void> {
     let moderator;
     if (anonymous) {
-      moderator = "anonymous moderator";
+      moderator = "anonymous moderator" as String
     } else {
       moderator = interaction.user as unknown as GuildMember;
     }
-
+    
     if (!interaction.guild) {
       await interaction.reply("You must be in a guild!");
       return;
@@ -77,6 +86,7 @@ export class WarnCommand {
         interaction.user.id
       );
       await interaction.reply(`${user} has been warned by ${moderator} for ${reason}.`);
+    
     } catch (error) {
       if (error instanceof Error) {
         if (error.message === "Cannot send messages to this user") {
@@ -86,6 +96,7 @@ export class WarnCommand {
             reason || "No reason specified",
             interaction.user.id
           );
+    
           await interaction.reply(`${user} has been warned by ${moderator} for ${reason}. \nNote: Can't DM user.`);
         } else {
           console.error("Error warning user:", error);
@@ -94,7 +105,6 @@ export class WarnCommand {
       }
     }
   }
-
   @Slash({
     description: "Removes warn from a user",
     dmPermission: false,
@@ -107,6 +117,7 @@ export class WarnCommand {
       required: true,
       type: ApplicationCommandOptionType.String,
     })
+
     warnID: string,
 
     @SlashOption({
@@ -115,10 +126,12 @@ export class WarnCommand {
       required: true,
       type: ApplicationCommandOptionType.Boolean,
     })
+
     anonymous: boolean,
 
     interaction: CommandInteraction
   ): Promise<void> {
+
     if (!interaction.guild) {
       await interaction.reply("You must be in a guild!");
       return;
@@ -126,13 +139,13 @@ export class WarnCommand {
 
     let moderator;
     if (anonymous) {
-      moderator = "anonymous moderator";
+      moderator = "anonymous moderator" as String
     } else {
       moderator = interaction.user as unknown as GuildMember;
     }
-
-    const warning = await this.warnService.findWarning(warnID);
-
+    
+    const warning = await this.warnService.findWarning(warnID); 
+   
     if (!warning) {
       await interaction.reply("Warning not found");
       return;
@@ -141,11 +154,13 @@ export class WarnCommand {
     try {
       await this.warnService.removeWarning(warning);
       await interaction.reply(`Warning ${warnID} successfully removed by ${moderator}`);
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error("Error removing warning:", error);
-        await interaction.reply(`Failed to remove warning ${warning}! Error: ${error.message}`);
-      }
     }
+ 
+  catch(error) {
+    if (error instanceof Error) {
+    console.error("Error warning user:", error);
+    await interaction.reply(`Failed to remove warning ${warning}! Error: ${error.message}`);
+  }
+}
   }
 }

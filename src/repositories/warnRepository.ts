@@ -41,4 +41,5 @@ export default class warnRepository extends baseRepository<warn> {
     async removeWarning(warn: warn) {
         return await this.delete(warn);
     }
+    
 }

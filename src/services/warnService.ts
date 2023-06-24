@@ -27,4 +27,5 @@ export default class warnService {
     async updateWarning(warn: warn) {
         return await this.warnRepository.save(warn);
     }
+
 }
