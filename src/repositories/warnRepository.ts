@@ -26,6 +26,7 @@ export default class warnRepository extends baseRepository<warn> {
         guildId: string,
         reason: string,
         moderatorUserId: string,
+        anonymous: boolean,
         // points: number
     ) {
         const warning = this.repository.create();
@@ -33,7 +34,8 @@ export default class warnRepository extends baseRepository<warn> {
         warning.guildId = guildId;
         warning.reason = reason;
         warning.moderatorUserId = moderatorUserId;
-        warning.timestamp = new Date();
+        warning.anonymous = anonymous;
+        warning.timestamp =  new Date();
         // warning.points = points;
         return await this.save(warning);
     }

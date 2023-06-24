@@ -18,8 +18,8 @@ export default class warnService {
         return await this.warnRepository.getWarningForUser(userId, guildId);
     }
 
-    async createWarning(userId: string, guildId: string, reason: string, moderatorUserId: string) {
-        return await this.warnRepository.createWarning(userId, guildId, reason, moderatorUserId);
+    async createWarning(userId: string, guildId: string, reason: string, moderatorUserId: string, anonymous:boolean) {
+        return await this.warnRepository.createWarning(userId, guildId, reason, moderatorUserId, anonymous);
     }
     async removeWarning(warn: warn) {
         return await this.warnRepository.removeWarning(warn);

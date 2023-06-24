@@ -16,8 +16,8 @@ export default class warn extends BaseModel {
     @Column()
     reason: string;
 
-    // @Column()
-    // points: number;
+    @Column()
+    anonymous: boolean
 
     @Column()
     timestamp: Date;
