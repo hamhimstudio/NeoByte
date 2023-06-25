@@ -1,5 +1,6 @@
 import { DataSource } from "typeorm";
 import warn from "../models/warn.js";
+import modmail from "../models/modmail.js";
 import serverSettings from "../models/serverSettings.js";
 
 
@@ -10,7 +11,7 @@ const connection = new DataSource({
     database: process.env.MONGODB_DB || "discord-bot",
     username: process.env.MONGODB_USERNAME,
     password: process.env.MONGODB_PASSWORD,
-    entities: [warn, serverSettings],
+    entities: [warn, modmail, serverSettings],
     synchronize:true,
 })
 
