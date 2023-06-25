@@ -57,7 +57,7 @@ Select a inquiry reason and a Mod Mail Channel will be created!`);
   })
   @Guard(RequirePermissionGuard("ManageMessages"))
   async claim(interaction: CommandInteraction): Promise<void> {
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply();
     try {
       await this.modmailService.claimMail(
         interaction.channelId,
@@ -70,7 +70,7 @@ Select a inquiry reason and a Mod Mail Channel will be created!`);
       }
     }
 
-    interaction.editReply("Mail successfully claimed");
+    interaction.editReply(`Mail claimed by ${interaction.user.toString()}`);
   }
 
   @Slash({
