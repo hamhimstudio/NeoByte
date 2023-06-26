@@ -3,7 +3,7 @@ import { Inject, Service } from "typedi";
 import modmailRepository from "../repositories/modmailRepository.js";
 import modmail, { modmailState } from "../models/modmail.js";
 import { bot } from "../main.js";
-import { ChannelType, Guild, GuildMember } from "discord.js";
+import { ChannelType, Guild, GuildMember, TextChannel } from "discord.js";
 
 @Service()
 export default class modmailService {
@@ -82,10 +82,12 @@ Please describe your inquiry in as much detail as possible.
     return await this.modmailRepository.save(mail);
   }
 
-  async closeMail(channel: string) {
-    const mail = await this.findMailByChannel(channel);
+  async closeMail(channel: TextChannel) {
+    const mail = await this.findMailByChannel(channel.id);
     if (!mail) throw new Error("This is not a valid modmail channel");
-    const chnl = await bot.channels.fetch(mail.channelId);
+
+    await channel.permissionOverwrites.delete(mail.userId);
+
     mail.state = modmailState.CLOSED;
     return await this.modmailRepository.save(mail);
   }
