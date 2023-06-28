@@ -7,6 +7,7 @@ import {
 import {
   Discord,
   Slash,
+  SlashChoice,
   SlashOption
 } from "discordx";
 import { Inject } from "typedi";
@@ -15,7 +16,6 @@ import { asyncForEach } from "../utils/asyncForeach.js";
 
 @Discord()
 export class WarnCommand {
-
   @Inject()
   warnService: warnService;
 
@@ -33,6 +33,11 @@ export class WarnCommand {
     })
     user: GuildMember,
 
+    @SlashChoice({ name: "Spam", value: "spam" })
+    @SlashChoice({ name: "Self Promotion", value: "self promotion" })
+    @SlashChoice({ name: "Disrespect", value: "disrespect" })
+    @SlashChoice({ name: "Begging", value: "begging" })
+    @SlashChoice({ name: "NSFW Content", value: "nsfw content" })
     @SlashOption({
       name: "reason",
       description: "Reason for the warn",
@@ -48,7 +53,6 @@ export class WarnCommand {
       type: ApplicationCommandOptionType.Boolean,
     })
     anonymous: boolean,
-
     interaction: CommandInteraction
   ): Promise<void> {
     let moderator;
@@ -58,6 +62,7 @@ export class WarnCommand {
       moderator = interaction.user as unknown as GuildMember;
     }
 
+    let points;
     if (!interaction.guild) {
       await interaction.reply("You must be in a guild!");
       return;
@@ -70,17 +75,31 @@ export class WarnCommand {
       return;
     }
 
+    const reasonPoints: Record<string, number> = {
+      "spam": 10,
+      "self promotion": 10,
+      "disrespect": 20,
+      "begging": 10,
+      "nsfw content": 30,
+    };
+
+    if (reason && reasonPoints.hasOwnProperty(reason)) {
+      points = reasonPoints[reason];
+    } else {
+      points = 0;
+    }
+
     try {
-      await user.send(`You have been warned by ${moderator} for ${reason} in ${guild}.`);
+      await user.send(`You have been warned by ${moderator} for ${reason} in ${guild}. Points: ${points}`);
       await this.warnService.createWarning(
         user.id,
         interaction.guild.id,
         reason || "No reason specified",
         interaction.user.id,
-        anonymous
+        anonymous,
+        points
       );
-      await interaction.reply(`${user} has been warned by ${moderator} for ${reason}.`);
-
+      await interaction.reply(`${user} has been warned by ${moderator} for ${reason}. Points: ${points}`);
     } catch (error) {
       if (error instanceof Error) {
         if (error.message === "Cannot send messages to this user") {
@@ -89,10 +108,10 @@ export class WarnCommand {
             interaction.guild.id,
             reason || "No reason specified",
             interaction.user.id,
-            anonymous
+            anonymous,
+            points
           );
-
-          await interaction.reply(`${user} has been warned by ${moderator} for ${reason}. \nNote: Can't DM user.`);
+          await interaction.reply(`${user} has been warned by ${moderator} for ${reason}. Points: ${points} \nNote: Can't DM user.`);
         } else {
           console.error("Error warning user:", error);
           await interaction.reply(`Failed to warn ${user}! Error: ${error.message}`);
@@ -178,19 +197,20 @@ export class WarnCommand {
       user.id,
       interaction.guild.id
     );
-  
+
     let message = "Warnings are:\n";
     await asyncForEach(warnings, async (warning, ind) => {
       const moderator = await interaction.guild?.members.fetch(warning.moderatorUserId);
       const moderatorName = warning.anonymous ? "Anonymous Moderator" : moderator ? moderator.displayName : warning.moderatorUserId;
-  
+
       message += `## Warning ${ind + 1}
         > ID: \`${warning._id}\`
         > Reason: ${warning.reason}
         > Moderator: ${moderatorName}
+        > Points: ${warning.points}
         > Time: <t:${Math.floor(warning.timestamp.getTime() / 1000)}:F>\n`;
     });
-  
+
     interaction.reply(message);
   }
-}  
+}
