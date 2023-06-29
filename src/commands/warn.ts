@@ -76,13 +76,15 @@ export class WarnCommand {
       return;
     }
 
-    const reasonPoints: Record<string, number> = {
+
+    const reasonPoints: {[key: string]: number} = {
       "spam": 10,
       "self promotion": 10,
       "disrespect": 20,
       "begging": 10,
       "nsfw content": 30,
     };
+    
     // points = reasonPoints[reason] || 0
     if (reason && reasonPoints.hasOwnProperty(reason)) {
             points = reasonPoints[reason];
