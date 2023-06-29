@@ -90,7 +90,6 @@ export class WarnCommand {
     }
 
     try {
-      await user.send(`You have been warned by ${moderator} for ${reason} in ${guild}. Points: ${points}`);
       await this.warnService.createWarning(
         user.id,
         interaction.guild.id,
@@ -99,6 +98,7 @@ export class WarnCommand {
         anonymous,
         points
       );
+      await user.send(`You have been warned by ${moderator} for ${reason} in ${guild}. Points: ${points}`);
       await interaction.reply(`${user} has been warned by ${moderator} for ${reason}. Points: ${points}`);
     } catch (error) {
       if (error instanceof Error) {
