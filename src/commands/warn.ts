@@ -85,14 +85,7 @@ export class WarnCommand {
       "nsfw content": 30,
     };
     
-    // points = reasonPoints[reason] || 0
-    if (reason && reasonPoints.hasOwnProperty(reason)) {
-            points = reasonPoints[reason];
-          } else {
-            points = 0;
-          }
-      
-
+   points = reason !== undefined ? reasonPoints[reason] || 0 : 0;
     try {
       await this.warnService.createWarning(
         user.id,
