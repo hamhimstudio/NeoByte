@@ -33,11 +33,12 @@ export class WarnCommand {
     })
     user: GuildMember,
 
-    @SlashChoice({ name: "Spam", value: "spam" })
-    @SlashChoice({ name: "Self Promotion", value: "self promotion" })
-    @SlashChoice({ name: "Disrespect", value: "disrespect" })
-    @SlashChoice({ name: "Begging", value: "begging" })
-    @SlashChoice({ name: "NSFW Content", value: "nsfw content" })
+    @SlashChoice(
+      { name: "Spam", value: "spam" },
+      { name: "Self Promotion", value: "self promotion" },
+      { name: "Disrespect", value: "disrespect" }, 
+      { name: "Begging", value: "begging" },
+      { name: "NSFW Content", value: "nsfw content" })
     @SlashOption({
       name: "reason",
       description: "Reason for the warn",
@@ -82,12 +83,13 @@ export class WarnCommand {
       "begging": 10,
       "nsfw content": 30,
     };
-
+    // points = reasonPoints[reason] || 0
     if (reason && reasonPoints.hasOwnProperty(reason)) {
-      points = reasonPoints[reason];
-    } else {
-      points = 0;
-    }
+            points = reasonPoints[reason];
+          } else {
+            points = 0;
+          }
+      
 
     try {
       await this.warnService.createWarning(
