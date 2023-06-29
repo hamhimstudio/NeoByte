@@ -36,16 +36,17 @@ export class WarnCommand {
     @SlashChoice(
       { name: "Spam", value: "spam" },
       { name: "Self Promotion", value: "self promotion" },
-      { name: "Disrespect", value: "disrespect" }, 
+      { name: "Disrespect", value: "disrespect" },
       { name: "Begging", value: "begging" },
-      { name: "NSFW Content", value: "nsfw content" })
+      { name: "NSFW Content", value: "nsfw content" }
+    )
     @SlashOption({
       name: "reason",
       description: "Reason for the warn",
       required: true,
       type: ApplicationCommandOptionType.String,
     })
-    reason: string | undefined,
+    reason: string,
 
     @SlashOption({
       name: "anonymous",
@@ -63,7 +64,6 @@ export class WarnCommand {
       moderator = interaction.user as unknown as GuildMember;
     }
 
-    let points;
     if (!interaction.guild) {
       await interaction.reply("You must be in a guild!");
       return;
@@ -76,16 +76,15 @@ export class WarnCommand {
       return;
     }
 
-
-    const reasonPoints: {[key: string]: number} = {
+    const reasonPoints: { [key: string]: number } = {
       "spam": 10,
       "self promotion": 10,
       "disrespect": 20,
       "begging": 10,
       "nsfw content": 30,
     };
-    
-   points = reason !== undefined ? reasonPoints[reason] || 0 : 0;
+
+    let points = reasonPoints[reason] || 0;
     try {
       await this.warnService.createWarning(
         user.id,
