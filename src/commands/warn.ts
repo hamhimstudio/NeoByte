@@ -2,7 +2,8 @@ import {
   ApplicationCommandOptionType,
   CommandInteraction,
   Guild,
-  GuildMember
+  GuildMember,
+  TextChannel
 } from "discord.js";
 import {
   Discord,
@@ -10,9 +11,12 @@ import {
   SlashChoice,
   SlashOption
 } from "discordx";
+import * as dotenv from 'dotenv';
 import { Inject } from "typedi";
 import warnService from "../services/warnService.js";
 import { asyncForEach } from "../utils/asyncForeach.js";
+
+dotenv.config();
 
 @Discord()
 export class WarnCommand {
@@ -57,12 +61,17 @@ export class WarnCommand {
     anonymous: boolean,
     interaction: CommandInteraction
   ): Promise<void> {
+    let channelId = process.env.PUNISIHMENTS_LOG_CHANNEL || "none";
+    let channel = user.client.channels.cache.get(channelId) as TextChannel;
+
     let moderator;
     if (anonymous) {
       moderator = "anonymous moderator" as string;
     } else {
       moderator = interaction.user as unknown as GuildMember;
     }
+
+    let moderatorLogMessage = interaction.user as unknown as GuildMember;
 
     if (!interaction.guild) {
       await interaction.reply("You must be in a guild!");
@@ -96,6 +105,7 @@ export class WarnCommand {
       );
       await user.send(`You have been warned by ${moderator} for ${reason} in ${guild}. Points: ${points}`);
       await interaction.reply(`${user} has been warned by ${moderator} for ${reason}. Points: ${points}`);
+      await channel.send(`${user} has been warned by ${moderatorLogMessage} for ${reason}. User has been given ${points} points for this warning.`);
     } catch (error) {
       if (error instanceof Error) {
         if (error.message === "Cannot send messages to this user") {
@@ -107,7 +117,8 @@ export class WarnCommand {
             anonymous,
             points
           );
-          await interaction.reply(`${user} has been warned by ${moderator} for ${reason}. Points: ${points} \nNote: Can't DM user.`);
+          await interaction.reply(`${user} has been warned by ${moderator} for ${reason}. Points: ${points}\nNote: Can't DM user.`);
+          await channel.send(`${user} has been warned by ${moderatorLogMessage} for ${reason}. User has been given ${points} points for this warning.`);
         } else {
           console.error("Error warning user:", error);
           await interaction.reply(`Failed to warn ${user}! Error: ${error.message}`);
@@ -144,13 +155,18 @@ export class WarnCommand {
       await interaction.reply("You must be in a guild!");
       return;
     }
+    let channelId = process.env.PUNISIHMENTS_LOG_CHANNEL || "none";
+    let channel = interaction.user.client.channels.cache.get(channelId) as TextChannel;
 
     let moderator;
+
     if (anonymous) {
       moderator = "anonymous moderator" as string;
     } else {
       moderator = interaction.user as unknown as GuildMember;
     }
+
+    let moderatorLogMessage = interaction.user as unknown as GuildMember;
 
     const warning = await this.warnService.findWarning(warnID);
 
@@ -162,6 +178,7 @@ export class WarnCommand {
     try {
       await this.warnService.removeWarning(warning);
       await interaction.reply(`Warning ${warnID} successfully removed by ${moderator}`);
+      await channel.send(`Warning ${warnID} successfully removed by ${moderatorLogMessage}`);
     } catch (error) {
       if (error instanceof Error) {
         console.error("Error warning user:", error);
@@ -178,7 +195,7 @@ export class WarnCommand {
   async getwarnings(
     @SlashOption({
       name: "user",
-      description: "The user to warn",
+      description: "The user to get all warns for",
       required: true,
       type: ApplicationCommandOptionType.User,
     })
