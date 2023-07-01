@@ -177,8 +177,8 @@ export class WarnCommand {
 
     try {
       await this.warnService.removeWarning(warning);
-      await interaction.reply(`Warning ${warnID} successfully removed by ${moderator}`);
-      await channel.send(`Warning ${warnID} successfully removed by ${moderatorLogMessage}`);
+      await interaction.reply(`Warning ${warnID} removed by ${moderator}`);
+      await channel.send(`Warning ${warnID} removed by ${moderatorLogMessage}`);
     } catch (error) {
       if (error instanceof Error) {
         console.error("Error warning user:", error);
