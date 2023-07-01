@@ -1,5 +1,7 @@
-## How to contribute?
-Contributing it pretty simple.
+# Contributing
+
+Looking to contribute something to this project? Awesome! Here's how to get started:
+
 1. Fork the repository.
 2. Run `git clone https://github.com/example/example` (replace example/example with the link of your fork).
 3. Add your changes.
