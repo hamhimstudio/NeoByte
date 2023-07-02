@@ -30,7 +30,7 @@ COPY --from=build-runner /tmp/app/package.json /app/package.json
 RUN npm install --omit=dev
 
 # Move build files
-COPY --from=build-runner /tmp/app/build /app/build
+COPY --from=build-runner /tmp/app/out /app/out
 
 # Start bot
 CMD [ "npm", "run", "start" ]
