@@ -1,8 +1,6 @@
 import { Message, TextChannel } from "discord.js";
-import { readFile } from "fs/promises";
-var template: string = (
-  await readFile("./src/transcripts/template.html")
-).toString();
+import { readFileSync } from "fs";
+var template: string = readFileSync("./src/transcripts/template.html").toString();
 
 var messageTemplate = `<div class="chatlog__message-group">
 <div class="chatlog__author-avatar-container">

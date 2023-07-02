@@ -1,8 +1,17 @@
-import { ApplicationCommandOptionType, CommandInteraction, GuildMember, TextChannel } from "discord.js";
+import {
+  ApplicationCommandOptionType,
+  CommandInteraction,
+  GuildMember,
+  TextChannel,
+} from "discord.js";
 import { Discord, Slash, SlashOption } from "discordx";
+import logService from "../services/logService.js";
+import { Inject } from "typedi";
 
 @Discord()
 export class MuteCommand {
+  @Inject()
+  logService: logService;
   @Slash({
     description: "Mute a user",
     dmPermission: false,
@@ -49,24 +58,36 @@ export class MuteCommand {
       return;
     }
 
-    let channelId = process.env.PUNISHMENTS_LOG_CHANNEL || "none";
-    let channel = interaction.user.client.channels.cache.get(channelId) as TextChannel;
-    let moderatorLogMessage = interaction.user as unknown as GuildMember;
+    let moderatorLogMessage = interaction.member
 
     try {
-      await user.send(`You have been muted for ${time} minute(s) in ${interaction.guild.name} for ${reason}.`);
+      await user.send(
+        `You have been muted for ${time} minute(s) in ${interaction.guild.name} for ${reason}.`
+      );
       await user.timeout(timeoutTime);
-      await interaction.reply(`${user} has been muted for ${time} minute(s) for ${reason}.`);
-      await channel.send(`${user} has been muted by ${moderatorLogMessage} for ${time} minute(s) for ${reason}.`);
+      await interaction.reply(
+        `${user} has been muted for ${time} minute(s) for ${reason}.`
+      );
+      await this.logService.sendLogMessage(
+        `${user} has been muted by ${moderatorLogMessage} for ${time} minute(s) for ${reason}.`,
+        interaction.guild.id
+      );
     } catch (error) {
       if (error instanceof Error) {
         if (error.message === "Cannot send messages to this user") {
           await user.timeout(timeoutTime);
-          await interaction.reply(`${user} has been muted for ${time} minute(s) for ${reason}\nNote: Can't DM user.`);
-          await channel.send(`${user} has been muted by ${moderatorLogMessage} for ${time} minute(s) for ${reason}.`);
+          await interaction.reply(
+            `${user} has been muted for ${time} minute(s) for ${reason}\nNote: Can't DM user.`
+          );
+          await this.logService.sendLogMessage(
+            `${user} has been muted by ${moderatorLogMessage} for ${time} minute(s) for ${reason}.`,
+            interaction.guild.id
+          );
         } else {
           console.error("Error muting user:", error);
-          await interaction.reply(`Failed to mute ${user}! Error: ${error.message}`);
+          await interaction.reply(
+            `Failed to mute ${user}! Error: ${error.message}`
+          );
         }
       }
     }
@@ -92,24 +113,32 @@ export class MuteCommand {
       return;
     }
 
-    let channelId = process.env.PUNISHMENTS_LOG_CHANNEL || "none";
-    let channel = interaction.user.client.channels.cache.get(channelId) as TextChannel;
-    let moderatorLogMessage = interaction.user as unknown as GuildMember;
+    let moderatorLogMessage = interaction.member
 
     try {
       await user.send(`You have been unmuted in ${interaction.guild.name}.`);
       await user.timeout(null);
       await interaction.reply(`${user} has been unmuted.`);
-      await channel.send(`${user} has been unmuted by ${moderatorLogMessage}.`);
+      await this.logService.sendLogMessage(
+        `${user} has been unmuted by ${moderatorLogMessage}.`,
+        interaction.guild.id
+      );
     } catch (error) {
       if (error instanceof Error) {
         if (error.message === "Cannot send messages to this user") {
           await user.timeout(null);
-          await interaction.reply(`${user} has been unmuted.\nNote: Can't DM user.`);
-          await channel.send(`${user} has been unmuted by ${moderatorLogMessage}.`);
+          await interaction.reply(
+            `${user} has been unmuted.\nNote: Can't DM user.`
+          );
+          await this.logService.sendLogMessage(
+            `${user} has been unmuted by ${moderatorLogMessage}.`,
+            interaction.guild.id
+          );
         } else {
           console.error("Error unmuting user:", error);
-          await interaction.reply(`Failed to unmute ${user}! Error: ${error.message}`);
+          await interaction.reply(
+            `Failed to unmute ${user}! Error: ${error.message}`
+          );
         }
       }
     }
