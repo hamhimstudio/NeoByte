@@ -1,14 +1,18 @@
+import dotenv from "dotenv";
 import "reflect-metadata";
+dotenv.config();
+
 import { dirname, importx } from "@discordx/importer";
 import type { Interaction, Message } from "discord.js";
 import { IntentsBitField } from "discord.js";
 import { Client, DIService, typeDiDependencyRegistryEngine } from "discordx";
-import dotenv from "dotenv";
-import { Service, Container } from "typedi";
+
+import { Container, Service } from "typedi";
+import connection from "./repositories/connection.js";
 DIService.engine = typeDiDependencyRegistryEngine
   .setService(Service)
   .setInjector(Container);
-dotenv.config();
+
 
 export const bot = new Client({
   // To use only guild command
@@ -71,7 +75,7 @@ async function run() {
   if (!process.env.BOT_TOKEN) {
     throw Error("Could not find BOT_TOKEN in your environment");
   }
-
+  connection.initialize()
   // Log in with your bot token
   await bot.login(process.env.BOT_TOKEN);
 }

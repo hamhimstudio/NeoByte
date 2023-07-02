@@ -1,0 +1,32 @@
+# This workflow will automaticly mark/close stale pull requests/issues.
+name: Mark stale issues and pull requests
+
+on:
+  schedule:
+  - cron: '0 00 * * *'
+
+jobs:
+  stale:
+
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+
+    steps:
+    - uses: actions/stale@v5
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        days-before-issue-stale: 10
+        days-before-pr-stale: 20
+        days-before-issue-close: 5
+        days-before-pr-close: 10
+        stale-issue-message: 'This issue is stale because it has been open 20 days with no activity. Remove stale label or comment or this will be closed in 10 days.'
+        stale-pr-message: 'This pull request is stale because it has been open 20 days with no activity. Remove stale label or comment or this will be closed in 10 days.'
+        close-issue-message: 'This issue was closed because it has been stalled for 5 days with no activity.'
+        close-pr-message: 'This pull request was closed because it has been stalled for 10 days with no activity.'
+        stale-issue-label: 'no-activity'
+        labels-to-remove-when-unstale: "no-activity"
+        stale-pr-label: 'no-activity'
+        remove-issue-stale-when-updated: 'no-activity'
+        
