@@ -83,7 +83,7 @@ Select a inquiry reason and a Mod Mail Channel will be created!`);
         console.log(exception.message);
         interaction.editReply(exception.message || "Something went wrong");
       }
-      return
+      return;
     }
 
     interaction.editReply(`Mail claimed by ${interaction.user.toString()}`);
@@ -94,7 +94,20 @@ Select a inquiry reason and a Mod Mail Channel will be created!`);
     dmPermission: false,
   })
   async close(interaction: CommandInteraction): Promise<void> {
-    if(!interaction.channel || !interaction.inGuild() || !interaction.channel.isTextBased() || interaction.channel.type === ChannelType.GuildAnnouncement ||  interaction.channel.type === ChannelType.PrivateThread||  interaction.channel.type === ChannelType.PublicThread || interaction.channel.isThread() || interaction.channel.type === ChannelType.GuildVoice) return
+    if (
+      !interaction.channel ||
+      !interaction.inGuild() ||
+      !interaction.channel.isTextBased() ||
+      interaction.channel.type === ChannelType.GuildAnnouncement ||
+      interaction.channel.type === ChannelType.PrivateThread ||
+      interaction.channel.type === ChannelType.PublicThread ||
+      interaction.channel.isThread() ||
+      interaction.channel.type === ChannelType.GuildVoice
+    )
+      {
+        await interaction.reply("This command can only be used in a valid text channel");
+        return
+      };
     await interaction.deferReply({ ephemeral: true });
     try {
       await this.modmailService.closeMail(interaction.channel);
@@ -196,14 +209,16 @@ If you want to close it, please use \`/mail close\``);
       !(interaction.member instanceof GuildMember)
     )
       return;
-    if(!interaction.member.roles.cache.has(process.env.MODMAIL_PING_ROLE!))
-    {
-      await interaction.reply({content: "You don't have the permission to do that!", ephemeral: true})
-      return
+    if (!interaction.member.roles.cache.has(process.env.MODMAIL_PING_ROLE!)) {
+      await interaction.reply({
+        content: "You don't have the permission to do that!",
+        ephemeral: true,
+      });
+      return;
     }
     await interaction.deferReply({ ephemeral: true });
 
-    await interaction.message.edit({components: []})
+    await interaction.message.edit({ components: [] });
     const mail = await this.modmailService.findMailByChannel(
       interaction.channelId
     );
@@ -250,7 +265,7 @@ If you want to close it, please use \`/mail close\``);
           content: "Mod Mail got removed!\nHere is the transcript!",
           files: [attachment],
         });
-      
+
       setTimeout(() => {
         interaction.channel?.delete();
       }, 5000);

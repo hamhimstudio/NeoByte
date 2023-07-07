@@ -3,7 +3,13 @@ import { Inject, Service } from "typedi";
 import modmailRepository from "../repositories/modmailRepository.js";
 import modmail, { modmailState } from "../models/modmail.js";
 import { bot } from "../main.js";
-import { ChannelType, Guild, GuildMember, TextChannel } from "discord.js";
+import {
+  ChannelType,
+  DMChannel,
+  Guild,
+  GuildMember,
+  TextChannel,
+} from "discord.js";
 
 @Service()
 export default class modmailService {
@@ -84,9 +90,24 @@ Please describe your inquiry in as much detail as possible.
 
   async closeMail(channel: TextChannel) {
     const mail = await this.findMailByChannel(channel.id);
+
     if (!mail) throw new Error("This is not a valid modmail channel");
 
-    await channel.permissionOverwrites.delete(mail.userId);
+    if (mail.state === modmailState.CLOSED)
+      throw new Error("This modmail is already closed");
+
+      const perm = channel.permissionOverwrites.cache.get(mail.userId);
+      if (!perm) {
+        await channel.permissionOverwrites.create(mail.userId, {
+          ViewChannel: true,
+          ReadMessageHistory: true,
+          SendMessages: false,
+        });
+      } else {
+        perm.allow.add("ViewChannel");
+        perm.allow.add("ReadMessageHistory");
+        perm.deny.add("SendMessages");
+      }
 
     mail.state = modmailState.CLOSED;
     return await this.modmailRepository.save(mail);
@@ -95,9 +116,29 @@ Please describe your inquiry in as much detail as possible.
   async openMail(channel: string) {
     const mail = await this.findMailByChannel(channel);
     if (!mail) throw new Error("This is not a valid modmail channel");
-    const chnl = await bot.channels.fetch(mail.channelId);
-    mail.state = modmailState.OPEN;
-    return await this.modmailRepository.save(mail);
+    try {
+      const chnl = await bot.channels.fetch(mail.channelId);
+      if (!chnl || !("permissionOverwrites" in chnl))
+        throw new Error("This is not a valid modmail channel");
+      const perm = chnl.permissionOverwrites.cache.get(mail.userId);
+      if (!perm) {
+        await chnl.permissionOverwrites.create(mail.userId, {
+          ViewChannel: true,
+          ReadMessageHistory: true,
+          SendMessages: true,
+        });
+      } else {
+        perm.allow.add("ViewChannel");
+        perm.allow.add("ReadMessageHistory");
+        perm.allow.add("SendMessages");
+      }
+
+      mail.state = modmailState.OPEN;
+      return await this.modmailRepository.save(mail);
+    } catch (exc) {
+      console.log(exc);
+      throw new Error("This is not (anymore) a valid modmail channel");
+    }
   }
 
   async removeMail(mail: modmail) {
