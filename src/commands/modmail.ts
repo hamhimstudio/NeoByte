@@ -21,16 +21,14 @@ import {
   Slash,
   SlashGroup,
 } from "discordx";
-import githubService from "../services/githubService.js";
 import { Inject } from "typedi";
-import modmailService from "../services/modmailService.js";
 import { RequirePermissionGuard } from "../guards/RequirePermissionGuard.js";
 import { modmailReason } from "../models/modmail.js";
+import modmailService from "../services/modmailService.js";
 import { transcriptcmd } from "./transcript.js";
-import { channel } from "diagnostics_channel";
 
 @SlashGroup({
-  description: "Mod Mail related commands",
+  description: "ModMail commands",
   name: "mail",
   dmPermission: false,
 })
@@ -40,8 +38,7 @@ export class ModMailCommands {
   static generateEmbed() {
     const embed = new EmbedBuilder();
     embed.setTitle("Modmail");
-    embed.setDescription(`# Welcome!
-Select a inquiry reason and a Mod Mail Channel will be created!`);
+    embed.setDescription(`Welcome to our modmail system! Please select the reason behind creating this inquiry and a  inquiry channel will be created!`);
 
     const menu = new StringSelectMenuBuilder()
       .addOptions(
@@ -67,7 +64,7 @@ Select a inquiry reason and a Mod Mail Channel will be created!`);
   modmailService: modmailService;
 
   @Slash({
-    description: "Claims a modmail.",
+    description: "Claim an inquiry",
     dmPermission: false,
   })
   @Guard(RequirePermissionGuard("ManageMessages"))
@@ -86,11 +83,11 @@ Select a inquiry reason and a Mod Mail Channel will be created!`);
       return;
     }
 
-    interaction.editReply(`Mail claimed by ${interaction.user.toString()}`);
+    interaction.editReply(`Inquiry claimed by ${interaction.user.toString()}`);
   }
 
   @Slash({
-    description: "Closes this modmail.",
+    description: "Close inquiry.",
     dmPermission: false,
   })
   async close(interaction: CommandInteraction): Promise<void> {
@@ -105,7 +102,7 @@ Select a inquiry reason and a Mod Mail Channel will be created!`);
       interaction.channel.type === ChannelType.GuildVoice
     )
       {
-        await interaction.reply("This command can only be used in a valid text channel");
+        await interaction.reply("This command can only be used in a valid text channel!");
         return
       };
     await interaction.deferReply({ ephemeral: true });
@@ -121,11 +118,11 @@ Select a inquiry reason and a Mod Mail Channel will be created!`);
       }
     }
 
-    await interaction.editReply("Mail successfully closed");
+    await interaction.editReply("Inquiry successfully closed");
 
     const button = new ButtonBuilder()
       .setCustomId("remove_mail")
-      .setLabel("Delete Mail")
+      .setLabel("Delete nquiry")
       .setStyle(ButtonStyle.Danger);
     const buttonRow =
       new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
@@ -133,14 +130,13 @@ Select a inquiry reason and a Mod Mail Channel will be created!`);
       );
 
     await interaction.channel?.send({
-      content: `This modmail has been closed by ${interaction.user.toString()}!
-If you want to reopen it, please use \`/mail open\``,
+      content: `This inquiry has been closed by ${interaction.user.toString()}! If you wish to reopen it, please use the  \`/mail open\ slash command!`,
       components: [buttonRow],
     });
   }
 
   @Slash({
-    description: "Reopens this modmail.",
+    description: "Reopen inquiry.",
     dmPermission: false,
   })
   async open(interaction: CommandInteraction): Promise<void> {
@@ -156,15 +152,14 @@ If you want to reopen it, please use \`/mail open\``,
         return;
       }
     }
-    await interaction.editReply("Mail successfully closed");
+    await interaction.editReply("Inquiry successfully reopened!");
 
     await interaction.channel
-      ?.send(`This modmail has been reopened! By ${interaction.user.toString()}
-If you want to close it, please use \`/mail close\``);
+      ?.send(`This inquiry has been reopened! By ${interaction.user.toString()} If you wish close it again, please use the  \`/mail close\` slash command!`);
   }
 
   @Slash({
-    description: "Posts the Mod Mail Hub Message.",
+    description: "Post modmail embed",
     dmPermission: false,
   })
   @Guard(RequirePermissionGuard("ManageGuild"))
@@ -173,7 +168,7 @@ If you want to close it, please use \`/mail close\``);
 
     await interaction.channel?.send(ModMailCommands.generateEmbed());
 
-    await interaction.editReply("Hub message successfully posted");
+    await interaction.editReply("Modmail message successfully posted");
   }
 
   @SelectMenuComponent({ id: "modmail-create" })
@@ -198,7 +193,7 @@ If you want to close it, please use \`/mail close\``);
       reason
     );
 
-    await interaction.editReply(`Modmail created! <#${modmail.channel.id}>`);
+    await interaction.editReply(`Inquiry created! <#${modmail.channel.id}>`);
   }
 
   @ButtonComponent({ id: "remove_mail" })
@@ -223,7 +218,7 @@ If you want to close it, please use \`/mail close\``);
       interaction.channelId
     );
     if (!mail) {
-      await interaction.editReply("This is not a modmail channel");
+      await interaction.editReply("This is not a inquiry channel");
       return;
     }
     try {
@@ -237,10 +232,10 @@ If you want to close it, please use \`/mail close\``);
         return;
       }
     }
-    await interaction.editReply("Mail successfully removed!");
+    await interaction.editReply("Inquiry successfully removed!");
 
     await interaction.channel?.send(
-      `This modmail has been removed by ${interaction.user.toString()}!`
+      `This inquiry has been removed by ${interaction.user.toString()}!`
     );
     if (interaction.channel) {
       var attachment = new AttachmentBuilder(
@@ -254,7 +249,7 @@ If you want to close it, please use \`/mail close\``);
       );
       const user = await interaction.guild.members.fetch(mail.userId);
       await user.send({
-        content: "Your Mod Mail Request got removed!\nHere is the transcript!",
+        content: "Your inquiry has been deleted and archived.\nHere is the transcript!",
         files: [attachment],
       });
       const log_channel = await interaction.guild.channels.fetch(
@@ -262,7 +257,7 @@ If you want to close it, please use \`/mail close\``);
       );
       if (log_channel instanceof TextChannel)
         await log_channel.send({
-          content: "Mod Mail got removed!\nHere is the transcript!",
+          content: "An inquiry has been deleted and archived.\nHere is the transcript!",
           files: [attachment],
         });
 
