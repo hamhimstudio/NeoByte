@@ -14,7 +14,7 @@ import getMessages from "../utils/fetchManyMessages.js";
 @SlashGroup({ description: "Creates a Transcript of the given channel in HTML.", name: "transcript" })
 @SlashGroup("transcript")
 export class transcriptcmd {
-  async startTranscript(channel: TextBasedChannel, maxsize: number = -1) {
+  static async startTranscript(channel: TextBasedChannel, maxsize: number = -1) {
     const foundMessages = await getMessages(channel, maxsize);
     var data = new transcript({ messages: foundMessages });
     var html = data.getHtml();
@@ -45,7 +45,7 @@ export class transcriptcmd {
     try {
       var attachment = new AttachmentBuilder(
         Buffer.from(
-          await this.startTranscript(channel || interaction.channel!, size),
+          await transcriptcmd.startTranscript(channel || interaction.channel!, size),
           "utf8"
         ),
         {
