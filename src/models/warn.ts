@@ -1,27 +1,27 @@
-import "reflect-metadata";
-import { Column, Entity } from "typeorm";
-import BaseModel from "./baseModel.js";
+import 'reflect-metadata'
+import { Column, Entity } from 'typeorm'
+import BaseModel from './baseModel.js'
 
-@Entity({ name: "user-warnings" })
+@Entity({ name: 'user-warnings' })
 export default class warn extends BaseModel {
     @Column()
-    moderatorUserId: string;
+    moderatorUserId: string
 
     @Column()
-    userId: string;
+    userId: string
 
     @Column()
-    guildId: string;
+    guildId: string
 
     @Column()
-    reason: string;
+    reason: string
 
     @Column()
     anonymous: boolean
-   
+
     @Column()
     points: number
-    
+
     @Column()
-    timestamp: Date;
+    timestamp: Date
 }

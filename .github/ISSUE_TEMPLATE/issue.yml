@@ -1,56 +1,56 @@
 name: ⚒️ Report Issues
 description: Submit a report regarding any problems or issues with the repository.
-labels: ["bug"]
+labels: ['bug']
 body:
-  - type: textarea
-    id: description
-    attributes:
-      label: Description
-      description: Provide a detailed description of the issue, including what went wrong, steps to reproduce the problem, and any relevant error messages or logs.
-    validations:
-      required: true
-  
-  - type: textarea
-    id: expected
-    attributes:
-      label: Expected Behavior
-      description: What did you expect to happen instead of the observed issue?
-    validations:
-      required: true
-      
-  - type: textarea
-    id: actual
-    attributes:
-      label: Actual Behavior
-      description: Explain what actually happened, including any unexpected behavior or errors.
-    validations:
-      required: true
-    
-  - type: textarea
-    id: screenshots
-    attributes:
-      label: Screenshots
-      description: Attach relevant screenshots or images that help illustrate the issue.
-    validations:
-      required: false
+    - type: textarea
+      id: description
+      attributes:
+          label: Description
+          description: Provide a detailed description of the issue, including what went wrong, steps to reproduce the problem, and any relevant error messages or logs.
+      validations:
+          required: true
 
-  - type: textarea
-    id: steps
-    attributes:
-      label: Steps to Reproduce
-      description: Provide steps to reproduce the issue, if applicable, so that others can replicate it and understand the problem better.
-    validations:
-      required: false
-      
-  - type: textarea
-    id: solution
-    attributes:
-      label: Possible Solutions
-      description: Suggest potential solutions or workarounds, if you have any.
-    validations:
-      required: false
-      
-  - type: markdown
-    attributes:
-      value: |
-        You can also join our [Discord community](http://discord.gg/NXYbv4dnYQ)
+    - type: textarea
+      id: expected
+      attributes:
+          label: Expected Behavior
+          description: What did you expect to happen instead of the observed issue?
+      validations:
+          required: true
+
+    - type: textarea
+      id: actual
+      attributes:
+          label: Actual Behavior
+          description: Explain what actually happened, including any unexpected behavior or errors.
+      validations:
+          required: true
+
+    - type: textarea
+      id: screenshots
+      attributes:
+          label: Screenshots
+          description: Attach relevant screenshots or images that help illustrate the issue.
+      validations:
+          required: false
+
+    - type: textarea
+      id: steps
+      attributes:
+          label: Steps to Reproduce
+          description: Provide steps to reproduce the issue, if applicable, so that others can replicate it and understand the problem better.
+      validations:
+          required: false
+
+    - type: textarea
+      id: solution
+      attributes:
+          label: Possible Solutions
+          description: Suggest potential solutions or workarounds, if you have any.
+      validations:
+          required: false
+
+    - type: markdown
+      attributes:
+          value: |
+              You can also join our [Discord community](http://discord.gg/NXYbv4dnYQ)

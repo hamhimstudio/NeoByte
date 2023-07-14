@@ -2,10 +2,10 @@
     "execMap": {
         "ts": "tsc -b -v && node out/index.js"
     },
-	"watch": ["src"],
-	"ext": "ts",
-	"ignore": ["node_modules"],
-	"watchOptions": {
-		"followSymlinks": false
-	}
+    "watch": ["src"],
+    "ext": "ts",
+    "ignore": ["node_modules"],
+    "watchOptions": {
+        "followSymlinks": false
+    }
 }

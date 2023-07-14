@@ -1,48 +1,48 @@
 name: ✨ Feature Request
 description: Suggest features, discuss new ideas!
-labels: ["enhancement"]
+labels: ['enhancement']
 body:
-  - type: textarea
-    id: description
-    attributes:
-      label: Description
-      description: Describe the desired feature in detail. Explain the problem or need the feature addresses and how it would improve the project.
-    validations:
-      required: true
+    - type: textarea
+      id: description
+      attributes:
+          label: Description
+          description: Describe the desired feature in detail. Explain the problem or need the feature addresses and how it would improve the project.
+      validations:
+          required: true
 
-  - type: textarea
-    id: case
-    attributes:
-      label: Use Case
-      description: Provide a specific use case or scenario where the feature would be beneficial.
-    validations:
-      required: true
+    - type: textarea
+      id: case
+      attributes:
+          label: Use Case
+          description: Provide a specific use case or scenario where the feature would be beneficial.
+      validations:
+          required: true
 
-  - type: textarea
-    id: expected
-    attributes:
-      label: Expected Behavior
-      description: Describe what they expect the feature to do and how it should behave.
-    validations:
-      required: true
+    - type: textarea
+      id: expected
+      attributes:
+          label: Expected Behavior
+          description: Describe what they expect the feature to do and how it should behave.
+      validations:
+          required: true
 
-  - type: textarea
-    id: screenshots
-    attributes:
-      label: Screenshots or Mockups
-      description: Attach any relevant screenshots, mockups, or visual representations that help illustrate the proposed feature.
-    validations:
-      required: false
+    - type: textarea
+      id: screenshots
+      attributes:
+          label: Screenshots or Mockups
+          description: Attach any relevant screenshots, mockups, or visual representations that help illustrate the proposed feature.
+      validations:
+          required: false
 
-  - type: textarea
-    id: context
-    attributes:
-      label: Additional Context
-      description: Include any additional context, such as related links, references, or examples that support the feature request.
-    validations:
-      required: false
+    - type: textarea
+      id: context
+      attributes:
+          label: Additional Context
+          description: Include any additional context, such as related links, references, or examples that support the feature request.
+      validations:
+          required: false
 
-  - type: markdown
-    attributes:
-      value: |
-        You can also join our [Discord community](http://discord.gg/NXYbv4dnYQ)
+    - type: markdown
+      attributes:
+          value: |
+              You can also join our [Discord community](http://discord.gg/NXYbv4dnYQ)

@@ -1,25 +1,25 @@
-version: "3"
+version: '3'
 services:
-  app:
-    build: .
-    command: node build/main.js
-    environment:
-      - BOT_TOKEN=${BOT_TOKEN}
-      - DANGERCORD_TOKEN=${DANGERCORD_TOKEN}
-    name: app
-  db:
-    image: mongo
-    ports:
-      - "27017:27017"
-    name: db
-  db_admin:
-    # This is a bit controversial as some people say you should not expose your database admin interface to the internet,
-    # but I think it's fine as long as you secure it properly.
-    # TL;DR: Don't use this in production. If you want to, Use NGINX and SSL, and probably a more secure password.
-    image: mongo-express
-    ports:
-      - "8081:8081"
-    environment:
-      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
-      - ME_CONFIG_MONGODB_ADMINPASSWORD=something_more_secure_than_this1!
-      - ME_CONFIG_MONGODB_SERVER=db
+    app:
+        build: .
+        command: node build/main.js
+        environment:
+            - BOT_TOKEN=${BOT_TOKEN}
+            - DANGERCORD_TOKEN=${DANGERCORD_TOKEN}
+        name: app
+    db:
+        image: mongo
+        ports:
+            - '27017:27017'
+        name: db
+    db_admin:
+        # This is a bit controversial as some people say you should not expose your database admin interface to the internet,
+        # but I think it's fine as long as you secure it properly.
+        # TL;DR: Don't use this in production. If you want to, Use NGINX and SSL, and probably a more secure password.
+        image: mongo-express
+        ports:
+            - '8081:8081'
+        environment:
+            - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+            - ME_CONFIG_MONGODB_ADMINPASSWORD=something_more_secure_than_this1!
+            - ME_CONFIG_MONGODB_SERVER=db

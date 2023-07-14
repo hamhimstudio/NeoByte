@@ -10,19 +10,19 @@ This is the source code for the official Discord bot of The Coding Empire Discor
 Contributions are always welcome! Please read the [contribution guidelines](CONTRIBUTING.md) first.
 Few things to keep in mind:
 
-- This is a bog-standard TypeScript project. If you're not familiar with TypeScript, you can learn it [here](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html).
-- Ensure you install the dev dependencies using `npm install --save-dev` before making any changes.
-- Please follow the [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/) guidelines while making commits. ("changed things" is not a good commit message)
-- **Test your code before making a pull request.** We have a CI/CD pipeline set up, but it's always better to test your code locally before making a pull request.
+-   This is a bog-standard TypeScript project. If you're not familiar with TypeScript, you can learn it [here](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html).
+-   Ensure you install the dev dependencies using `npm install --save-dev` before making any changes.
+-   Please follow the [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/) guidelines while making commits. ("changed things" is not a good commit message)
+-   **Test your code before making a pull request.** We have a CI/CD pipeline set up, but it's always better to test your code locally before making a pull request.
 
 ## Running the bot locally
 
 ### Prerequisites
 
-- Docker (optional)
-- Node.js (v14 or higher)
-- MongoDB (local or remote)
-- A Discord bot token
+-   Docker (optional)
+-   Node.js (v14 or higher)
+-   MongoDB (local or remote)
+-   A Discord bot token
 
 ### Setting up the database
 

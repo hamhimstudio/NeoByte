@@ -1,39 +1,43 @@
-import "reflect-metadata";
-import { Column, Entity } from "typeorm";
-import BaseModel from "./baseModel.js";
+import 'reflect-metadata'
+import { Column, Entity } from 'typeorm'
+import BaseModel from './baseModel.js'
 
 export const enum modmailState {
-  OPEN,
-  CLOSED,
+    OPEN,
+    CLOSED,
 }
 
-export const modmailReason: {label: string, description?: string, value?: string}[] = [
-  { label: "General", description: "For General Inquiries" },
-  { label: "Report", value: "Report a Member." },
-  { label: "Appeal" },
-  { label: "Other" },
-];
+export const modmailReason: {
+    label: string
+    description?: string
+    value?: string
+}[] = [
+    { label: 'General', description: 'For General Inquiries' },
+    { label: 'Report', value: 'Report a Member.' },
+    { label: 'Appeal' },
+    { label: 'Other' },
+]
 
-@Entity({ name: "modmail" })
+@Entity({ name: 'modmail' })
 export default class modmail extends BaseModel {
-  @Column()
-  assignedModeratorId?: string;
+    @Column()
+    assignedModeratorId?: string
 
-  @Column()
-  state: modmailState;
+    @Column()
+    state: modmailState
 
-  @Column()
-  userId: string;
+    @Column()
+    userId: string
 
-  @Column()
-  channelId: string;
+    @Column()
+    channelId: string
 
-  @Column()
-  guildId: string;
+    @Column()
+    guildId: string
 
-  @Column()
-  reason: string;
+    @Column()
+    reason: string
 
-  @Column()
-  creationTimestamp: Date;
+    @Column()
+    creationTimestamp: Date
 }
