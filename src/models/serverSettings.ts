@@ -14,11 +14,5 @@ export default class serverSettings extends BaseModel {
     welcomeMessageChannelId?: string
 
   @Column()
-  logsChannelId?: string;
-
-  @Column()
-  welcomeMessageChannelId?: string;
-
-  @Column()
   welcomeMessage?: string;
 }
