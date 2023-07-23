@@ -116,4 +116,42 @@ export class ServerSettingsCommand {
     }
     interaction.reply("Successfully set the welcome message!");
   }
+
+  @Slash({
+    description: "Set unverified role",
+    dmPermission: false,
+    defaultMemberPermissions: ["ManageGuild"],
+  })
+  async setunverifiedrole(
+    @SlashOption({
+      name: "role",
+      description: "The role to be removed, once a user has completed Onboarding",
+      required: true,
+      type: ApplicationCommandOptionType.Role,
+      channelTypes: undefined,
+    })
+    unverifiedRole: TextChannel,
+    interaction: CommandInteraction
+  ): Promise<void> {
+    if (!interaction.guild) {
+      await interaction.reply("You must be in a guild!");
+      return;
+    }
+    
+
+    const guild = interaction.guild;
+
+    const serverSettings = await this.serverSettings.getSettings(guild.id);
+
+    serverSettings.unverifiedRole = unverifiedRole.id;
+    try {
+      await this.serverSettings.createOrUpdateSettings(serverSettings);
+    } catch (exc) {
+      console.error(exc);
+      await interaction.reply("Failed to set the unverified role!");
+      return;
+    }
+    interaction.reply("Successfully set the unverified role!");
+  }
 }
+
