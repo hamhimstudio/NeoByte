@@ -1,6 +1,6 @@
 {
     "execMap": {
-        "ts": "tsc -b -v && node out/index.js"
+        "ts": "tsc -b -v && node out/main.js"
     },
 	"watch": ["src"],
 	"ext": "ts",
