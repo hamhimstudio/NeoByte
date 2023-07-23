@@ -96,9 +96,8 @@ export class ModMailCommands {
       !interaction.inGuild() ||
       !interaction.channel.isTextBased() ||
       interaction.channel.type === ChannelType.GuildAnnouncement ||
-      interaction.channel.type === ChannelType.PrivateThread ||
-      interaction.channel.type === ChannelType.PublicThread ||
       interaction.channel.isThread() ||
+      interaction.channel.type === ChannelType.GuildStageVoice ||
       interaction.channel.type === ChannelType.GuildVoice
     )
       {
