@@ -1,7 +1,9 @@
 import type { ArgsOf } from "discordx";
 import { Discord, On } from "discordx";
+import {GuildMember} from 'discord.js'
 import { Inject } from "typedi";
 import welcomeService from "../services/welcomeService.js";
+import removeRoleService from "../services/removeRoleService.js";
 
 @Discord()
 export class ReadyEvent {
@@ -24,3 +26,19 @@ export class MemberJoinEvent {
     }
   }
 }
+@Discord()
+export class MemberUpdateEvent {
+  @Inject()
+  removeRoleService: removeRoleService;
+  @On({ event: "guildMemberUpdate" })
+  async memberJoinEvent([member]: ArgsOf<"guildMemberUpdate">): Promise<void> {
+    const guildId = member.guild.id;
+     try {
+      await this.removeRoleService.removeUnverifiedRole(member as GuildMember, guildId)
+     }
+    catch(error) {
+      console.error("Error in guildMemberUpdate event listener:", error);
+    }
+  }
+}
+
