@@ -13,8 +13,7 @@
     "forceConsistentCasingInFileNames": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": false,
-	"allowJs": false,
-    
+    "allowJs": false
   },
   "exclude": ["build", "node_modules"]
 }
