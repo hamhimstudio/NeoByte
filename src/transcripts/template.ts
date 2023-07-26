@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+export default `<!DOCTYPE html>
 <html lang="en">
   <head>
     <title>{thread.name}</title>
@@ -1383,8 +1383,8 @@
                   eB: !0,
                   eE: !0,
                   v: [
-                    { b: "```", e: "```" },
-                    { b: "`", e: "`" },
+                    { b: "\`\`\`", e: "\`\`\`" },
+                    { b: "\`", e: "\`" },
                   ],
                 },
               ];
@@ -1433,7 +1433,7 @@
                 cN: "string",
                 v: [
                   { b: '(u8?|U|L)?"', e: '"', i: "\\n", c: [e.BE] },
-                  { b: /(?:u8?|U|L)?R"([^()\\ ]{0,16})\((?:.|\n)*?\)\1"/ },
+                  { b: /(?:u8?|U|L)?R"([^()\\ ]{0,16})\((?:.|\n)*?\)\\1"/ },
                   { b: "'\\\\?.", e: "'", i: "." },
                 ],
               },
@@ -1935,7 +1935,7 @@
                 r: 0,
               },
               n = { cN: "subst", b: "\\$\\{", e: "\\}", k: r, c: [] },
-              i = { cN: "string", b: "`", e: "`", c: [e.BE, n] };
+              i = { cN: "string", b: "\`", e: "\`", c: [e.BE, n] };
             n.c = [e.ASM, e.QSM, i, a, e.RM];
             var s = n.c.concat([e.CBCM, e.CLCM]);
             return {
@@ -2108,7 +2108,7 @@
                       v: [
                         { b: /"/, e: /"/ },
                         { b: /'/, e: /'/ },
-                        { b: /[^\s"'=<>`]+/ },
+                        { b: /[^\s"'=<>\`]+/ },
                       ],
                     },
                   ],
@@ -2198,8 +2198,8 @@
                 {
                   cN: "code",
                   v: [
-                    { b: "^```w*s*$", e: "^```s*$" },
-                    { b: "`.+?`" },
+                    { b: "^\`\`\`w*s*$", e: "^\`\`\`s*$" },
+                    { b: "\`.+?\`" },
                     { b: "^( {4}|\t)", e: "$", r: 0 },
                   ],
                 },
@@ -2381,7 +2381,7 @@
                     { b: "qw\\s+q", e: "q", r: 5 },
                     { b: "'", e: "'", c: [e.BE] },
                     { b: '"', e: '"' },
-                    { b: "`", e: "`", c: [e.BE] },
+                    { b: "\`", e: "\`", c: [e.BE] },
                     { b: "{\\w+}", c: [], r: 0 },
                     { b: "-?\\w+\\s*\\=\\>", c: [], r: 0 },
                   ],
@@ -2596,7 +2596,7 @@
                       { cN: "class", bK: "class" },
                     ],
                     e: /:/,
-                    i: /[${=;\n,]/,
+                    i: /[\${=;\n,]/,
                     c: [e.UTM, s, { b: /->/, eW: !0, k: "None" }],
                   },
                   { cN: "meta", b: /^[\t ]*@/, e: /$/ },
@@ -2607,7 +2607,7 @@
           }),
           n.registerLanguage("ruby", function (e) {
             var t =
-                "[a-zA-Z_]\\w*[!?=]?|[-+~]\\@|<<|>>|=~|===?|<=>|[<>]=?|\\*\\*|[-/+%^&*~`|]|\\[\\]=?",
+                "[a-zA-Z_]\\w*[!?=]?|[-+~]\\@|<<|>>|=~|===?|<=>|[<>]=?|\\*\\*|[-/+%^&*~\`|]|\\[\\]=?",
               r = {
                 keyword:
                   "and then defined module in return redo if BEGIN retry end for self when next until do begin unless END rescue else break undef not super class case require yield alias while ensure elsif or include attr_reader attr_writer attr_accessor",
@@ -2627,7 +2627,7 @@
                 v: [
                   { b: /'/, e: /'/ },
                   { b: /"/, e: /"/ },
-                  { b: /`/, e: /`/ },
+                  { b: /\`/, e: /\`/ },
                   { b: "%[qQwWx]?\\(", e: "\\)" },
                   { b: "%[qQwWx]?\\[", e: "\\]" },
                   { b: "%[qQwWx]?{", e: "}" },
@@ -2742,7 +2742,7 @@
                   c: [
                     { cN: "string", b: "'", e: "'", c: [e.BE, { b: "''" }] },
                     { cN: "string", b: '"', e: '"', c: [e.BE, { b: '""' }] },
-                    { cN: "string", b: "`", e: "`", c: [e.BE] },
+                    { cN: "string", b: "\`", e: "\`", c: [e.BE] },
                     e.CNM,
                     e.CBCM,
                     t,
@@ -2838,3 +2838,4 @@
     <div class="chatlog" id="chatlog">{messages.history}</div>
   </body>
 </html>
+`

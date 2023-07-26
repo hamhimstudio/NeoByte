@@ -17,6 +17,7 @@ export class ServerSettingsCommand {
         description: 'Set server log Channel',
         dmPermission: false,
         defaultMemberPermissions: ['ManageGuild'],
+        name: "setlogchannel"
     })
     async setLogchannel(
         @SlashOption({
@@ -55,6 +56,7 @@ export class ServerSettingsCommand {
         description: 'Set the channel where welcome messages will be sent.',
         dmPermission: false,
         defaultMemberPermissions: ['ManageGuild'],
+        name: "setlogchannel"
     })
     async setWelcomeChannel(
         @SlashOption({
@@ -96,6 +98,7 @@ export class ServerSettingsCommand {
             'Set the warm welcome message that will be sent to new members when they join the server.',
         dmPermission: false,
         defaultMemberPermissions: ['ManageGuild'],
+        name: "setlogchannel"
     })
     async setwelcomemessage(
         @SlashOption({
@@ -136,6 +139,7 @@ export class ServerSettingsCommand {
         description: 'Set the role for unverified users',
         dmPermission: false,
         defaultMemberPermissions: ['ManageGuild'],
+        name: "setlogchannel"
     })
     async setUnverifiedRole(
         @SlashOption({
