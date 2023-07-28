@@ -10,7 +10,8 @@
         "build:changelog": "npx @discordx/changelog --src src",
         "prettier": "npx prettier . --write",
         "start": "node out/main.js",
-        "dev": "nodemon npm run dev --config nodemon.json"
+        "watch": "nodemon npm run dev --config nodemon.json",
+        "dev": "ts-node-esm src/main.ts"
     },
     "dependencies": {
         "@discordx/importer": "^1.2.2",
