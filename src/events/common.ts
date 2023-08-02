@@ -4,7 +4,7 @@ import { GuildMember, ThreadChannel, ForumChannel } from "discord.js"
 import { Inject } from "typedi"
 import welcomeService from "../services/welcomeService.js"
 import removeRoleService from "../services/removeRoleService.js"
-import autoPingRole from "./../services/autoPingService.js"
+import autoPingRoleService from "./../services/autoPingService.js"
 
 @Discord()
 export class ReadyEvent {
@@ -49,11 +49,11 @@ export class MemberUpdateEvent {
 @Discord()
 export class ThreadCreateEvent {
     @Inject()
-    autoPingRole: autoPingRole
+    autoPingRoleService: autoPingRoleService
     @On({ event: "threadCreate" })
     async postCreateEvent([thread]: ArgsOf<"threadCreate">): Promise<void> {
         const threadChannel = thread as ThreadChannel
         const guildId = thread.guild.id
-        await this.autoPingRole.pingHelperRole(guildId, threadChannel)
+        await this.autoPingRoleService.pingHelperRole(guildId, threadChannel)
     }
 }
