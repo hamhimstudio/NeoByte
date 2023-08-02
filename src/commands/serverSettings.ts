@@ -3,26 +3,27 @@ import {
     ChannelType,
     CommandInteraction,
     TextChannel,
-} from 'discord.js'
-import { Discord, Slash, SlashOption } from 'discordx'
-import { Role } from 'discord.js'
-import { Inject } from 'typedi'
-import serverSettingsService from '../services/serverSettingsService.js'
+} from "discord.js"
+import { Discord, Slash, SlashOption } from "discordx"
+import { Role } from "discord.js"
+import { Inject } from "typedi"
+import serverSettingsService from "../services/serverSettingsService.js"
 
 @Discord()
 export class ServerSettingsCommand {
     @Inject()
     serverSettings: serverSettingsService
+
     @Slash({
-        description: 'Set server log Channel',
+        description: "Set server log Channel",
         dmPermission: false,
-        defaultMemberPermissions: ['ManageGuild'],
-        name: "setlogchannel"
+        defaultMemberPermissions: ["ManageGuild"],
+        name: "setlogchannel",
     })
     async setLogchannel(
         @SlashOption({
-            name: 'channel',
-            description: 'The log channel where everything is logged.',
+            name: "channel",
+            description: "The log channel where everything is logged.",
             required: true,
             type: ApplicationCommandOptionType.Channel,
             channelTypes: [ChannelType.GuildText],
@@ -32,7 +33,7 @@ export class ServerSettingsCommand {
     ): Promise<void> {
         if (!interaction.guild) {
             await interaction.reply(
-                'Oops, you gotta be in a guild to use that command! 😅'
+                "Oops, you gotta be in a guild to use that command! 😅"
             )
             return
         }
@@ -50,19 +51,20 @@ export class ServerSettingsCommand {
             )
             return
         }
-        interaction.reply('Log channel successfully set! 🎉')
+        interaction.reply("Log channel successfully set! 🎉")
     }
+
     @Slash({
-        description: 'Set the channel where welcome messages will be sent.',
+        description: "Set the channel where welcome messages will be sent.",
         dmPermission: false,
-        defaultMemberPermissions: ['ManageGuild'],
-        name: "setlogchannel"
+        defaultMemberPermissions: ["ManageGuild"],
+        name: "setwelcomechannel", // Unique name for this command
     })
     async setWelcomeChannel(
         @SlashOption({
-            name: 'channel',
+            name: "channel",
             description:
-                'TSet the channel where welcome messages should be sent.',
+                "Set the channel where welcome messages should be sent.",
             required: true,
             type: ApplicationCommandOptionType.Channel,
             channelTypes: [ChannelType.GuildText],
@@ -72,7 +74,7 @@ export class ServerSettingsCommand {
     ): Promise<void> {
         if (!interaction.guild) {
             await interaction.reply(
-                'Oops, you gotta be in a guild to use that command! 😅'
+                "Oops, you gotta be in a guild to use that command! 😅"
             )
             return
         }
@@ -87,24 +89,25 @@ export class ServerSettingsCommand {
         } catch (exc) {
             console.error(exc)
             await interaction.reply(
-                'Oops, looks like there was an issue setting the welcome message channel.'
+                "Oops, looks like there was an issue setting the welcome message channel."
             )
             return
         }
-        interaction.reply('Welcome channel successfully set! 🎉')
+        interaction.reply("Welcome channel successfully set! 🎉")
     }
+
     @Slash({
         description:
-            'Set the warm welcome message that will be sent to new members when they join the server.',
+            "Set the warm welcome message that will be sent to new members when they join the server.",
         dmPermission: false,
-        defaultMemberPermissions: ['ManageGuild'],
-        name: "setlogchannel"
+        defaultMemberPermissions: ["ManageGuild"],
+        name: "setwelcomemessage", // Unique name for this command
     })
     async setwelcomemessage(
         @SlashOption({
-            name: 'message',
+            name: "message",
             description:
-                'The warm and welcoming message for new members joining the server.',
+                "The warm and welcoming message for new members joining the server.",
             required: true,
             type: ApplicationCommandOptionType.String,
         })
@@ -113,7 +116,7 @@ export class ServerSettingsCommand {
     ): Promise<void> {
         if (!interaction.guild) {
             await interaction.reply(
-                'Oops, you gotta be in a guild to use that command! 😅'
+                "Oops, you gotta be in a guild to use that command! 😅"
             )
             return
         }
@@ -132,19 +135,20 @@ export class ServerSettingsCommand {
             )
             return
         }
-        interaction.reply('Welcome message successfully updated! 🎉')
+        interaction.reply("Welcome message successfully updated! 🎉")
     }
 
     @Slash({
-        description: 'Set the role for unverified users',
+        description: "Set the role for unverified users",
         dmPermission: false,
-        defaultMemberPermissions: ['ManageGuild'],
-        name: "setlogchannel"
+        defaultMemberPermissions: ["ManageGuild"],
+        name: "setunverifiedrole",
     })
     async setUnverifiedRole(
         @SlashOption({
-            name: 'role',
-            description: 'The role to remove after user completes onboarding.',
+            name: "role",
+            description:
+                "The role to remove after the user completes onboarding.",
             required: true,
             type: ApplicationCommandOptionType.Role,
         })
@@ -153,7 +157,7 @@ export class ServerSettingsCommand {
     ): Promise<void> {
         if (!interaction.guild) {
             await interaction.reply(
-                'Oops, you gotta be in a guild to use that command! 😅'
+                "Oops, you gotta be in a guild to use that command! 😅"
             )
             return
         }
@@ -166,10 +170,48 @@ export class ServerSettingsCommand {
         } catch (exc) {
             console.error(exc)
             await interaction.reply(
-                'Oops, looks like there was a problem while trying to set the unverified role.'
+                "Oops, looks like there was a problem while trying to set the unverified role."
             )
             return
         }
-        interaction.reply('Unverified role set successfully! 🎉')
+        interaction.reply("Unverified role set successfully! 🎉")
+    }
+
+    @Slash({
+        description: "Set the role to be pinged on a help post.",
+        dmPermission: false,
+        defaultMemberPermissions: ["ManageGuild"],
+        name: "setautopingrole",
+    })
+    async setAutoPingRole(
+        @SlashOption({
+            name: "role",
+            description: "The role to ping when an user opens a help post.",
+            required: true,
+            type: ApplicationCommandOptionType.Role,
+        })
+        helperRole: Role,
+        interaction: CommandInteraction
+    ): Promise<void> {
+        if (!interaction.guild) {
+            await interaction.reply(
+                "Oops, you gotta be in a guild to use that command! 😅"
+            )
+            return
+        }
+        const guild = interaction.guild
+        const serverSettings = await this.serverSettings.getSettings(guild.id)
+
+        serverSettings.autoPingRole = helperRole.id
+        try {
+            await this.serverSettings.createOrUpdateSettings(serverSettings)
+        } catch (exc) {
+            console.error(exc)
+            await interaction.reply(
+                "Oops, looks like there was a problem while trying to set the help post ping role."
+            )
+            return
+        }
+        interaction.reply("Help post ping role set successfully! 🎉")
     }
 }

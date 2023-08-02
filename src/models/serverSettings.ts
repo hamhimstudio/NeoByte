@@ -1,8 +1,8 @@
-import 'reflect-metadata'
-import { Column, Entity } from 'typeorm'
-import BaseModel from './baseModel.js'
+import "reflect-metadata"
+import { Column, Entity } from "typeorm"
+import BaseModel from "./baseModel.js"
 
-@Entity({ name: 'server-settings' })
+@Entity({ name: "server-settings" })
 export default class serverSettings extends BaseModel {
     @Column()
     guildId: string
@@ -14,8 +14,11 @@ export default class serverSettings extends BaseModel {
     welcomeMessageChannelId?: string
 
     @Column()
-    welcomeMessage?: string;
-    
+    welcomeMessage?: string
+
     @Column()
-    unverifiedRole?: string;
+    unverifiedRole?: string
+
+    @Column()
+    autoPingRole?: string
 }
