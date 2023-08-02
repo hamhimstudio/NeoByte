@@ -21,4 +21,7 @@ export default class serverSettings extends BaseModel {
 
     @Column()
     autoPingRole?: string
+
+    @Column()
+    helpChannel?: string
 }
