@@ -29,7 +29,7 @@ Few things to keep in mind:
 
 ### Setting up the database
 
-Setting up the database is pretty straightforward. All you need to do is run a local instance of MongoDB. You can do this by running `docker-compose up -d` in the root directory of this project. If you don't have Docker installed, you can install it from [here](https://docs.docker.com/get-docker/).
+Setting up the database is pretty straightforward. All you need to do is run a local instance of MongoDB. You can do this by running `docker-compose up -d` (`sudo docker compose up -d`, if you're on Linux) in the root directory of this project. If you don't have Docker installed, you can install it from [here](https://docs.docker.com/get-docker/).
 
 Or, you can use a tool such as [MongoDB Compass](https://www.mongodb.com/products/compass) to connect to a remote database, or run a local instance of MongoDB.
 
