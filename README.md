@@ -1,3 +1,6 @@
+# This is a fork
+I made this to experiment with my code and nothing else.
+
 # The Coding Empire Discord Bot
 
 [![Discord](https://img.shields.io/discord/952138215136055329?color=7289da&label=Discord&logo=discord&logoColor=white)](https://discord.gg/Z7NDVrTmDN)
